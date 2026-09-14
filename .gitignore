@@ -1,7 +1,36 @@
-.DS_Store
+# Build and test output
 node_modules/
 dist/
 .builds/
-.scans/
 .release/
+.scans/
 test/fixtures/out/
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editors and temp files
+*.swp
+*~
+.vscode/
+*.tmp
+*.temp
+~$*
+
+# Locked files produced while testing the tool
+*.locked
+*.Locked
+
+# LaTeX build artifacts in the archived v1 decision memos
+docs/archive/v1/**/*.aux
+docs/archive/v1/**/*.log
+docs/archive/v1/**/*.out
+docs/archive/v1/**/*.synctex.gz
+docs/archive/v1/**/*.fdb_latexmk
+docs/archive/v1/**/*.fls
