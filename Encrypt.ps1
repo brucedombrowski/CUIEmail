@@ -4,13 +4,15 @@
     Encrypts files for secure CUI email transmission per NIST SP 800-171.
 
 .DESCRIPTION
-    Encrypts files using FIPS 140-2 compliant AES-256-CBC with PBKDF2 key derivation.
+    Encrypts files using FIPS 140-2 compliant AES-256-CBC with HMAC-SHA256 integrity
+    protection (encrypt-then-MAC) and PBKDF2 key derivation. Format is defined in Crypto.psm1.
     Outputs .Locked files, Decrypt_Instructions.html with decryption instructions, and optionally
     a .msg email file with proper CUI markings per 32 CFR Part 2002.
 
     Compliance:
     - FIPS 140-2: AES-256-CBC encryption
-    - NIST SP 800-132: PBKDF2-HMAC-SHA256 key derivation (100,000 iterations)
+    - FIPS 198-1: HMAC-SHA256 authentication tag, verified before decryption
+    - NIST SP 800-132: PBKDF2-HMAC-SHA256 key derivation (600,000 iterations)
     - NIST SP 800-171: CUI handling requirements
     - 32 CFR Part 2002: CUI marking requirements
 
@@ -54,20 +56,13 @@ $DEFAULT_CUI_CATEGORY = 0         # Default CUI category when user presses Enter
                                   # 0 = Basic CUI, 1 = CTI, 2 = EXPT, 3 = PRVCY, 4 = PROPIN
 
 # ============================================================================
-# CRYPTOGRAPHIC CONFIGURATION - Do not modify (FIPS 140-2 / NIST SP 800-132)
+# CRYPTOGRAPHIC CORE - Crypto.psm1 is the single source of truth for the format
 # ============================================================================
-$ITERATIONS = 100000  # PBKDF2 iterations (NIST SP 800-132 recommends minimum 10,000)
-$SALT_SIZE = 16       # bytes (128 bits)
-$KEY_SIZE = 32        # bytes (256 bits for AES-256)
-$IV_SIZE = 16         # bytes (128 bits for AES block size)
-
-# ============================================================================
-# DECRYPTION ONE-LINER - Single source of truth for Decrypt_Instructions.html and Password_Email
-# ============================================================================
-# This PowerShell one-liner is included in both Decrypt_Instructions.html and Password_Email.
-# Uses file picker dialogs for ease of use. DO NOT MODIFY unless you understand
-# the cryptographic operations (must match Encrypt-File function).
-$DECRYPTION_ONELINER = 'Add-Type -AssemblyName System.Windows.Forms;$o=New-Object System.Windows.Forms.OpenFileDialog;$o.Title="Select .Locked file to decrypt";$o.Filter="Locked files (*.Locked)|*.Locked|All files (*.*)|*.*";if($o.ShowDialog()-eq''OK''){$f=$o.FileName;$p=Read-Host "Password" -AsSecureString;$b=[IO.File]::ReadAllBytes($f);$k=[Security.Cryptography.Rfc2898DeriveBytes]::new([Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($p)),$b[0..15],100000,"SHA256");$a=[Security.Cryptography.Aes]::Create();$a.Key=$k.GetBytes(32);$a.IV=$b[16..31];$c=$a.CreateDecryptor().TransformFinalBlock($b,32,$b.Length-32);$s=New-Object System.Windows.Forms.SaveFileDialog;$s.Title="Save decrypted file as";$s.FileName=[IO.Path]::GetFileName(($f-replace''\.Locked$'',''''));$s.InitialDirectory=[IO.Path]::GetDirectoryName($f);if($s.ShowDialog()-eq''OK''){[IO.File]::WriteAllBytes($s.FileName,$c);Write-Host "Decrypted: $($s.FileName)" -ForegroundColor Green}}'
+# Format version 2: AES-256-CBC + HMAC-SHA256 (encrypt-then-MAC), PBKDF2-HMAC-SHA256.
+# The recipient one-liner is generated from the same module constants.
+Import-Module (Join-Path $PSScriptRoot 'Crypto.psm1') -Force
+$CRYPTO = Get-CUICryptoParameters
+$DECRYPTION_ONELINER = Get-CUIDecryptOneLiner
 
 # Platform detection
 $IsWindowsPlatform = $PSVersionTable.PSEdition -eq 'Desktop' -or $IsWindows
@@ -324,52 +319,8 @@ function Encrypt-File {
     )
 
     try {
-        # Read input file
-        $plainBytes = [System.IO.File]::ReadAllBytes($InputPath)
-
-        # Generate random salt and IV
-        $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
-        $salt = New-Object byte[] $SALT_SIZE
-        $iv = New-Object byte[] $IV_SIZE
-        $rng.GetBytes($salt)
-        $rng.GetBytes($iv)
-
-        # Derive key using PBKDF2
-        $keyDeriver = New-Object System.Security.Cryptography.Rfc2898DeriveBytes(
-            $Password,
-            $salt,
-            $ITERATIONS,
-            [System.Security.Cryptography.HashAlgorithmName]::SHA256
-        )
-        $key = $keyDeriver.GetBytes($KEY_SIZE)
-
-        # Create AES encryptor
-        $aes = [System.Security.Cryptography.Aes]::Create()
-        $aes.Mode = [System.Security.Cryptography.CipherMode]::CBC
-        $aes.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
-        $aes.Key = $key
-        $aes.IV = $iv
-
-        # Encrypt
-        $encryptor = $aes.CreateEncryptor()
-        $cipherBytes = $encryptor.TransformFinalBlock($plainBytes, 0, $plainBytes.Length)
-
-        # Combine: Salt + IV + Ciphertext
-        $outputBytes = New-Object byte[] ($SALT_SIZE + $IV_SIZE + $cipherBytes.Length)
-        [Array]::Copy($salt, 0, $outputBytes, 0, $SALT_SIZE)
-        [Array]::Copy($iv, 0, $outputBytes, $SALT_SIZE, $IV_SIZE)
-        [Array]::Copy($cipherBytes, 0, $outputBytes, $SALT_SIZE + $IV_SIZE, $cipherBytes.Length)
-
-        # Write output file
-        $outputPath = "$InputPath.Locked"
-        [System.IO.File]::WriteAllBytes($outputPath, $outputBytes)
-
-        # Cleanup
-        $aes.Dispose()
-        $keyDeriver.Dispose()
-        $rng.Dispose()
-
-        return $outputPath
+        # Crypto.psm1: version-2 .Locked (REQ-1.3 authenticated, REQ-1.7 verify-before-decrypt)
+        return Protect-CUIFile -InputPath $InputPath -Password $Password
     }
     catch {
         Write-Host "ERROR encrypting $InputPath : $_" -ForegroundColor Red
@@ -564,7 +515,7 @@ $fileListHtml
     <div class="footer">
         <p>Files encrypted with SendCUIEmail</p>
         <p style="font-size: 10px; color: #999; margin-top: 8px;">
-            Encryption: AES-256-CBC (FIPS 140-2) &bull; Key Derivation: PBKDF2-HMAC-SHA256, 100,000 iterations (NIST SP 800-132)<br>
+            Encryption: AES-256-CBC + HMAC-SHA256 (FIPS 140-2, FIPS 198-1) &bull; Key Derivation: PBKDF2-HMAC-SHA256, $($CRYPTO.DefaultIterations.ToString('N0')) iterations (NIST SP 800-132)<br>
             CUI handling per 32 CFR Part 2002 &bull; Transmission protection per NIST SP 800-171
         </p>
     </div>
@@ -698,7 +649,7 @@ $fileListText
   - Decrypt_Instructions.html (Decryption Instructions)
 
 DECRYPTION:
-The attached files are encrypted using AES-256 (FIPS 140-2 compliant).
+The attached files are encrypted using AES-256 with integrity protection (FIPS 140-2 compliant).
 Open Decrypt_Instructions.html for step-by-step instructions.
 Password will be provided separately.
 
@@ -949,7 +900,7 @@ Write-Host ""
 # Encrypt each file
 $encryptedFiles = @()
 
-Write-Host "Encrypting files (AES-256-CBC, FIPS 140-2)..." -ForegroundColor Cyan
+Write-Host "Encrypting files (AES-256-CBC + HMAC-SHA256, FIPS 140-2)..." -ForegroundColor Cyan
 foreach ($file in $files) {
     Write-Host "  Encrypting: $(Split-Path $file -Leaf)..." -NoNewline
     $result = Encrypt-File -InputPath $file -Password $password

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Crypto.psm1** - Single cryptographic core shared by Encrypt.ps1, Decrypt.ps1, Test.ps1, TestIntegration.ps1, test.sh, and the recipient one-liner (issue #2, finding M1)
+- **.Locked format version 2** - `SCUI` magic, version byte, iteration count in header, salt, IV, ciphertext, HMAC-SHA256 tag. Encrypt-then-MAC with a MAC key derived independently of the AES key; tag verified in constant time before any plaintext is produced (REQ-1.3, REQ-1.7; issue #2, finding C1)
+- **Test.ps1** - Tamper detection (bit flips in every field, truncation, extension), 300-attempt wrong-password test with zero false accepts, header iteration-count test, legacy v1 fixture, no-output-on-failure check. Now tests the shipping module instead of a private copy
+
+### Security
+- Wrong password or modified ciphertext is now always rejected. In the v1 format roughly 1 in 256 wrong passwords produced a garbage output file without error
+- **PBKDF2 iterations** 100,000 → 600,000 (OWASP 2023 floor for HMAC-SHA256). Stored in the file header so old files decrypt and the count can rise again (issue #2, finding M2)
+- **Password handling** - Key derivation from UTF-8 bytes that are zeroed after use (issue #2, finding M3)
+- **Decrypt** - Version-1 files still decrypt, with a warning that they carry no integrity protection. Version-1 files are no longer produced
+- **Decryption one-liner** - Generated from Crypto.psm1; verifies the tag on v2 files and falls back to the v1 path for legacy files
+- Byte handling uses `Buffer.BlockCopy` instead of array slicing (issue #2, finding M6)
+
 ### Changed
 - **README.md** - Replaced generated recipient instructions (committed by mistake in v0.7.0) with a project README (issue #2, finding C2)
 - **REQ-2026-001 v1.2** - REQ-1.3 now requires authenticated encryption (AES-GCM, or AES-CBC with HMAC-SHA256 encrypt-then-MAC); added REQ-1.7 (verify tag before writing plaintext). Status Draft until v2 implements it (issue #2, finding C1). PDF not yet regenerated.

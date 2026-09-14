@@ -30,13 +30,14 @@ Open `Decrypt_Instructions.html` and paste the one-liner into PowerShell, or run
 | Parameter | Value | Standard |
 |-----------|-------|----------|
 | Cipher | AES-256-CBC, PKCS7 padding | FIPS 197, NIST SP 800-38A |
-| Key derivation | PBKDF2-HMAC-SHA256, 100,000 iterations | NIST SP 800-132 |
+| Integrity | HMAC-SHA256 over header and ciphertext, encrypt-then-MAC, verified before decryption | FIPS 198-1 |
+| Key derivation | PBKDF2-HMAC-SHA256, 600,000 iterations, 64 bytes split into AES key and MAC key | NIST SP 800-132 |
 | Salt and IV | 128-bit random, unique per file | NIST SP 800-90A |
 | Library | .NET `System.Security.Cryptography` only, no third-party code | FIPS 140-2 via Windows CNG when FIPS mode is enabled |
 
-File format: `[16-byte salt][16-byte IV][ciphertext]`.
+File format v2: `"SCUI"` `0x02` `[4-byte iterations]` `[16-byte salt]` `[16-byte IV]` `[ciphertext]` `[32-byte HMAC tag]`. Defined once in `Crypto.psm1`, which Encrypt, Decrypt, the tests, and the recipient one-liner all share.
 
-**Known limitation (v1 format):** ciphertext carries no authentication tag, so tampering is not detected and a wrong password can occasionally produce a garbage output file instead of an error. REQ-2026-001 v1.2 now requires authenticated encryption. This will ship in v2 with a versioned file header. See [issue #2](https://github.com/brucedombrowski/SendCUIEmail/issues/2).
+Wrong password or a modified file fails verification and no output file is written. Version-1 files (`[salt][IV][ciphertext]`, no tag) from earlier releases still decrypt, with a warning. See [issue #2](https://github.com/brucedombrowski/SendCUIEmail/issues/2).
 
 ## Compliance Documents
 
@@ -58,7 +59,7 @@ Standards applied: FIPS 140-2, FIPS 197, NIST SP 800-132, NIST SP 800-38A, NIST 
 ./test.sh             # macOS/Linux, requires pwsh
 ```
 
-Round-trip tests cover empty files, single and multi-block files, binary content, 10 MB files, and wrong-password rejection. `test.sh` also runs the non-interactive integration path and updates the VER document.
+`Test.ps1` exercises the shared module: round trips (empty, single block, multi-block, binary, 100 KB), 300 wrong-password attempts with zero false accepts, bit flips in every header field, ciphertext, and tag, truncation, header-carried iteration counts, and legacy v1 decryption. `test.sh` also runs the non-interactive integration path and updates the VER document.
 
 ## Limits
 

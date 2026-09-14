@@ -162,10 +162,10 @@ ENCRYPT_EXIT=$?
 echo ""
 if [ $ENCRYPT_EXIT -eq 0 ]; then
     echo -e "${GREEN}Encrypt.ps1 completed successfully${NC}"
-    ((FILE_TESTS_PASSED++))
+    FILE_TESTS_PASSED=$((FILE_TESTS_PASSED+1))
 else
     echo -e "${RED}Encrypt.ps1 failed with exit code $ENCRYPT_EXIT${NC}"
-    ((FILE_TESTS_FAILED++))
+    FILE_TESTS_FAILED=$((FILE_TESTS_FAILED+1))
 fi
 
 # Check for expected outputs
@@ -179,7 +179,7 @@ for file in small_text.txt empty.txt binary_sample.bin; do
         echo -e "  ${GREEN}✓${NC} ${file}.Locked (${SIZE})"
     else
         echo -e "  ${RED}✗${NC} ${file}.Locked - MISSING"
-        ((FILE_TESTS_FAILED++))
+        FILE_TESTS_FAILED=$((FILE_TESTS_FAILED+1))
     fi
 done
 
@@ -193,11 +193,11 @@ if [ -f "${BUILD_DIR}/Decrypt_Instructions.html" ]; then
         echo -e "    ${GREEN}✓${NC} Contains PowerShell decryption one-liner"
     else
         echo -e "    ${RED}✗${NC} Missing PowerShell decryption one-liner"
-        ((FILE_TESTS_FAILED++))
+        FILE_TESTS_FAILED=$((FILE_TESTS_FAILED+1))
     fi
 else
     echo -e "  ${RED}✗${NC} Decrypt_Instructions.html - MISSING"
-    ((FILE_TESTS_FAILED++))
+    FILE_TESTS_FAILED=$((FILE_TESTS_FAILED+1))
 fi
 
 # Check for .msg files (Windows/Outlook only)
@@ -371,22 +371,15 @@ for file in small_text.txt empty.txt binary_sample.bin; do
 
     echo -n "  Decrypting ${file}.Locked... "
 
-    # Decrypt using the one-liner approach
+    # Decrypt through the shared module (verifies the HMAC tag before decrypting)
     pwsh -NoProfile -Command "
-        \$f = '$LOCKED_FILE'
-        \$p = '$TEST_PASSWORD'
-        \$d = [IO.File]::ReadAllBytes(\$f)
-        \$k = [Security.Cryptography.Rfc2898DeriveBytes]::new(\$p, \$d[0..15], 100000, 'SHA256')
-        \$a = [Security.Cryptography.Aes]::Create()
-        \$a.Key = \$k.GetBytes(32)
-        \$a.IV = \$d[16..31]
-        \$c = \$a.CreateDecryptor().TransformFinalBlock(\$d, 32, \$d.Length-32)
-        [IO.File]::WriteAllBytes('$DECRYPTED_FILE', \$c)
+        Import-Module '${SCRIPT_DIR}/Crypto.psm1' -Force
+        Unprotect-CUIFile -InputPath '$LOCKED_FILE' -Password '$TEST_PASSWORD' -OutputPath '$DECRYPTED_FILE' | Out-Null
     " 2>/dev/null
 
     if [ ! -f "$DECRYPTED_FILE" ]; then
         echo -e "${RED}FAILED (decryption error)${NC}"
-        ((FILE_TESTS_FAILED++))
+        FILE_TESTS_FAILED=$((FILE_TESTS_FAILED+1))
         continue
     fi
 
@@ -401,10 +394,10 @@ for file in small_text.txt empty.txt binary_sample.bin; do
 
     if [ "$ORIG_HASH" = "$DEC_HASH" ]; then
         echo -e "${GREEN}PASSED${NC}"
-        ((FILE_TESTS_PASSED++))
+        FILE_TESTS_PASSED=$((FILE_TESTS_PASSED+1))
     else
         echo -e "${RED}FAILED (hash mismatch)${NC}"
-        ((FILE_TESTS_FAILED++))
+        FILE_TESTS_FAILED=$((FILE_TESTS_FAILED+1))
     fi
 done
 

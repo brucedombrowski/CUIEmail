@@ -1,15 +1,25 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Tests the encryption/decryption round-trip to verify integrity.
+    Tests the SendCUIEmail cryptographic core (Crypto.psm1).
 
 .DESCRIPTION
-    Creates a test file, encrypts it, deletes the original, decrypts the encrypted file,
-    and verifies the contents match the original. This validates the entire encryption
-    pipeline is working correctly.
+    Exercises the same module that Encrypt.ps1 and Decrypt.ps1 use, so a regression in the
+    shipping code is caught here. Covers REQ-2026-001 v1.2:
+      - Round trip: encrypt, delete original, decrypt, compare SHA-256
+      - Wrong password is rejected deterministically (REQ-1.7)
+      - Tampered ciphertext, header, and tag are rejected (REQ-1.3)
+      - No output file is written when verification fails (REQ-1.7)
+      - Iteration count is carried in the header (REQ-2.7)
+      - Legacy version-1 files still decrypt
 
 .PARAMETER TestDir
     Optional directory for test files. Defaults to a temp directory.
+
+.PARAMETER Iterations
+    PBKDF2 iterations for test vectors. Low by default so the suite runs in seconds;
+    the format stores the count, so the shipping default is exercised by the one
+    round-trip test that omits this parameter.
 
 .EXAMPLE
     .\Test.ps1
@@ -18,294 +28,246 @@
 
 param(
     [Parameter(Mandatory=$false)]
-    [string]$TestDir
+    [string]$TestDir,
+
+    [Parameter(Mandatory=$false)]
+    [int]$Iterations = 2000
 )
 
-# Configuration - must match Encrypt.ps1
-$ITERATIONS = 100000
-$SALT_SIZE = 16
-$KEY_SIZE = 32
-$IV_SIZE = 16
+Import-Module (Join-Path $PSScriptRoot 'Crypto.psm1') -Force
+$CRYPTO = Get-CUICryptoParameters
 
 function Write-Banner {
     Write-Host ""
     Write-Host "================================================" -ForegroundColor Cyan
-    Write-Host "  SendCUIEmail - Round-Trip Test" -ForegroundColor Cyan
-    Write-Host "  Encrypt -> Delete Original -> Decrypt -> Verify" -ForegroundColor Cyan
+    Write-Host "  SendCUIEmail - Crypto Core Test" -ForegroundColor Cyan
+    Write-Host "  Format v$($CRYPTO.FormatVersion): $($CRYPTO.Cipher) + $($CRYPTO.Mac), $($CRYPTO.Kdf)" -ForegroundColor Cyan
     Write-Host "================================================" -ForegroundColor Cyan
     Write-Host ""
 }
 
-function Encrypt-TestFile {
-    param(
-        [string]$InputPath,
-        [string]$Password
-    )
-
-    try {
-        $plainBytes = [System.IO.File]::ReadAllBytes($InputPath)
-
-        $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
-        $salt = New-Object byte[] $SALT_SIZE
-        $iv = New-Object byte[] $IV_SIZE
-        $rng.GetBytes($salt)
-        $rng.GetBytes($iv)
-
-        $keyDeriver = New-Object System.Security.Cryptography.Rfc2898DeriveBytes(
-            $Password, $salt, $ITERATIONS,
-            [System.Security.Cryptography.HashAlgorithmName]::SHA256
-        )
-        $key = $keyDeriver.GetBytes($KEY_SIZE)
-
-        $aes = [System.Security.Cryptography.Aes]::Create()
-        $aes.Mode = [System.Security.Cryptography.CipherMode]::CBC
-        $aes.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
-        $aes.Key = $key
-        $aes.IV = $iv
-
-        $encryptor = $aes.CreateEncryptor()
-        $cipherBytes = $encryptor.TransformFinalBlock($plainBytes, 0, $plainBytes.Length)
-
-        $outputBytes = New-Object byte[] ($SALT_SIZE + $IV_SIZE + $cipherBytes.Length)
-        [Array]::Copy($salt, 0, $outputBytes, 0, $SALT_SIZE)
-        [Array]::Copy($iv, 0, $outputBytes, $SALT_SIZE, $IV_SIZE)
-        [Array]::Copy($cipherBytes, 0, $outputBytes, $SALT_SIZE + $IV_SIZE, $cipherBytes.Length)
-
-        $outputPath = "$InputPath.Locked"
-        [System.IO.File]::WriteAllBytes($outputPath, $outputBytes)
-
-        $aes.Dispose()
-        $keyDeriver.Dispose()
-        $rng.Dispose()
-
-        return $outputPath
-    }
-    catch {
-        return $null
-    }
-}
-
-function Decrypt-TestFile {
-    param(
-        [string]$InputPath,
-        [string]$Password
-    )
-
-    try {
-        $data = [System.IO.File]::ReadAllBytes($InputPath)
-
-        $salt = $data[0..($SALT_SIZE - 1)]
-        $iv = $data[$SALT_SIZE..($SALT_SIZE + $IV_SIZE - 1)]
-        $ciphertext = $data[($SALT_SIZE + $IV_SIZE)..($data.Length - 1)]
-
-        $keyDeriver = [System.Security.Cryptography.Rfc2898DeriveBytes]::new(
-            $Password, $salt, $ITERATIONS,
-            [System.Security.Cryptography.HashAlgorithmName]::SHA256
-        )
-        $key = $keyDeriver.GetBytes($KEY_SIZE)
-
-        $aes = [System.Security.Cryptography.Aes]::Create()
-        $aes.Mode = [System.Security.Cryptography.CipherMode]::CBC
-        $aes.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
-        $aes.Key = $key
-        $aes.IV = $iv
-
-        $decryptor = $aes.CreateDecryptor()
-        $plainBytes = $decryptor.TransformFinalBlock($ciphertext, 0, $ciphertext.Length)
-
-        $outputPath = $InputPath -replace '\.Locked$', ''
-        [System.IO.File]::WriteAllBytes($outputPath, $plainBytes)
-
-        $aes.Dispose()
-        $keyDeriver.Dispose()
-
-        return $outputPath
-    }
-    catch {
-        return $null
-    }
-}
-
 function Get-FileHash256 {
     param([string]$Path)
-    $hash = Get-FileHash -Path $Path -Algorithm SHA256
-    return $hash.Hash
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        $stream = [System.IO.File]::OpenRead($Path)
+        try { return [BitConverter]::ToString($sha.ComputeHash($stream)).Replace('-', '') }
+        finally { $stream.Dispose() }
+    }
+    finally { $sha.Dispose() }
+}
+
+function New-TestPath {
+    param([string]$Dir, [string]$Prefix)
+    return Join-Path $Dir "$Prefix`_$([Guid]::NewGuid().ToString('N').Substring(0,8)).bin"
+}
+
+function Write-Result {
+    param([string]$Label, [bool]$Ok, [string]$Detail = '')
+    if ($Ok) { Write-Host "  PASS  $Label" -ForegroundColor Green }
+    else     { Write-Host "  FAIL  $Label" -ForegroundColor Red }
+    if ($Detail) { Write-Host "        $Detail" -ForegroundColor Gray }
+    return $Ok
+}
+
+# Legacy v1 writer, kept only as a test fixture. Never used by the tool.
+function New-LegacyV1File {
+    param([string]$Path, [byte[]]$Content, [string]$Password)
+    $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+    $salt = New-Object byte[] 16; $iv = New-Object byte[] 16
+    $rng.GetBytes($salt); $rng.GetBytes($iv); $rng.Dispose()
+    $kdf = New-Object System.Security.Cryptography.Rfc2898DeriveBytes($Password, $salt, $CRYPTO.LegacyIterations, [System.Security.Cryptography.HashAlgorithmName]::SHA256)
+    $aes = [System.Security.Cryptography.Aes]::Create()
+    $aes.Key = $kdf.GetBytes(32); $aes.IV = $iv
+    $cipher = $aes.CreateEncryptor().TransformFinalBlock($Content, 0, $Content.Length)
+    $out = New-Object byte[] (32 + $cipher.Length)
+    [Buffer]::BlockCopy($salt, 0, $out, 0, 16)
+    [Buffer]::BlockCopy($iv, 0, $out, 16, 16)
+    [Buffer]::BlockCopy($cipher, 0, $out, 32, $cipher.Length)
+    [System.IO.File]::WriteAllBytes($Path, $out)
+    $aes.Dispose(); $kdf.Dispose()
 }
 
 function Test-RoundTrip {
-    param(
-        [string]$TestName,
-        [byte[]]$OriginalContent,
-        [string]$TestDir,
-        [string]$Password
-    )
+    param([string]$TestName, [byte[]]$OriginalContent, [string]$TestDir, [string]$Password, [int]$Iter)
 
     Write-Host ""
     Write-Host "Test: $TestName" -ForegroundColor Yellow
     Write-Host ("-" * 50)
 
-    $testFile = Join-Path $TestDir "test_$([Guid]::NewGuid().ToString('N').Substring(0,8)).bin"
-
+    $testFile = New-TestPath $TestDir 'test_roundtrip'
+    $encryptedFile = $null; $decryptedFile = $null
     try {
-        # Step 1: Create test file
-        Write-Host "  [1/5] Creating test file..." -NoNewline
         [System.IO.File]::WriteAllBytes($testFile, $OriginalContent)
         $originalHash = Get-FileHash256 -Path $testFile
-        Write-Host " Done ($($OriginalContent.Length) bytes, SHA256: $($originalHash.Substring(0,16))...)" -ForegroundColor Green
 
-        # Step 2: Encrypt
-        Write-Host "  [2/5] Encrypting..." -NoNewline
-        $encryptedFile = Encrypt-TestFile -InputPath $testFile -Password $Password
-        if (-not $encryptedFile) {
-            Write-Host " FAILED" -ForegroundColor Red
-            return $false
-        }
-        $encryptedSize = (Get-Item $encryptedFile).Length
-        Write-Host " Done ($encryptedSize bytes)" -ForegroundColor Green
+        $encryptedFile = if ($Iter -gt 0) { Protect-CUIFile -InputPath $testFile -Password $Password -Iterations $Iter }
+                         else             { Protect-CUIFile -InputPath $testFile -Password $Password }
+        $info = Get-CUIFileInfo -InputPath $encryptedFile
+        $expectedSize = $CRYPTO.HeaderBytes + ([math]::Floor($OriginalContent.Length / 16) + 1) * 16 + $CRYPTO.TagBytes
+        $ok = Write-Result "Encrypted: v$($info.Version), $($info.Iterations) iterations, $((Get-Item $encryptedFile).Length) bytes" `
+            (($info.Version -eq 2) -and ($info.Authenticated) -and ((Get-Item $encryptedFile).Length -eq $expectedSize))
 
-        # Step 3: Delete original
-        Write-Host "  [3/5] Deleting original..." -NoNewline
         Remove-Item $testFile -Force
-        if (Test-Path $testFile) {
-            Write-Host " FAILED (file still exists)" -ForegroundColor Red
-            return $false
-        }
-        Write-Host " Done" -ForegroundColor Green
-
-        # Step 4: Decrypt
-        Write-Host "  [4/5] Decrypting..." -NoNewline
-        $decryptedFile = Decrypt-TestFile -InputPath $encryptedFile -Password $Password
-        if (-not $decryptedFile) {
-            Write-Host " FAILED" -ForegroundColor Red
-            return $false
-        }
-        Write-Host " Done" -ForegroundColor Green
-
-        # Step 5: Verify
-        Write-Host "  [5/5] Verifying integrity..." -NoNewline
+        $decryptedFile = Unprotect-CUIFile -InputPath $encryptedFile -Password $Password
         $decryptedHash = Get-FileHash256 -Path $decryptedFile
-        $decryptedSize = (Get-Item $decryptedFile).Length
-
-        if ($originalHash -eq $decryptedHash) {
-            Write-Host " PASSED" -ForegroundColor Green
-            Write-Host "        Original:  SHA256: $($originalHash.Substring(0,16))... ($($OriginalContent.Length) bytes)" -ForegroundColor Gray
-            Write-Host "        Decrypted: SHA256: $($decryptedHash.Substring(0,16))... ($decryptedSize bytes)" -ForegroundColor Gray
-            return $true
-        }
-        else {
-            Write-Host " FAILED (hash mismatch)" -ForegroundColor Red
-            Write-Host "        Original:  $originalHash" -ForegroundColor Red
-            Write-Host "        Decrypted: $decryptedHash" -ForegroundColor Red
-            return $false
-        }
+        $ok = (Write-Result "Decrypted, SHA-256 matches original" ($originalHash -eq $decryptedHash) "SHA256: $($originalHash.Substring(0,16))... ($($OriginalContent.Length) bytes)") -and $ok
+        return $ok
+    }
+    catch {
+        return Write-Result "Exception: $_" $false
     }
     finally {
-        # Cleanup test files
-        if (Test-Path $testFile) { Remove-Item $testFile -Force -ErrorAction SilentlyContinue }
-        if ($encryptedFile -and (Test-Path $encryptedFile)) { Remove-Item $encryptedFile -Force -ErrorAction SilentlyContinue }
-        if ($decryptedFile -and (Test-Path $decryptedFile)) { Remove-Item $decryptedFile -Force -ErrorAction SilentlyContinue }
+        foreach ($f in @($testFile, $encryptedFile, $decryptedFile)) {
+            if ($f -and (Test-Path $f)) { Remove-Item $f -Force -ErrorAction SilentlyContinue }
+        }
     }
 }
 
 function Test-WrongPassword {
-    param(
-        [string]$TestDir,
-        [string]$CorrectPassword
-    )
+    param([string]$TestDir, [string]$CorrectPassword, [int]$Iter, [int]$Attempts = 300)
 
     Write-Host ""
-    Write-Host "Test: Wrong Password Rejection" -ForegroundColor Yellow
+    Write-Host "Test: Wrong Password Rejection ($Attempts attempts, must reject every one)" -ForegroundColor Yellow
     Write-Host ("-" * 50)
 
-    $testFile = Join-Path $TestDir "test_wrongpwd_$([Guid]::NewGuid().ToString('N').Substring(0,8)).bin"
-    $testContent = [System.Text.Encoding]::UTF8.GetBytes("This should not decrypt with wrong password")
+    $content = [System.Text.Encoding]::UTF8.GetBytes("This should not decrypt with wrong password")
+    $locked = Protect-CUIBytes -Plaintext $content -Password $CorrectPassword -Iterations $Iter
+    $rejected = 0
+    for ($i = 0; $i -lt $Attempts; $i++) {
+        try { $null = Unprotect-CUIBytes -Data $locked -Password "$CorrectPassword-wrong-$i" }
+        catch [System.Security.Cryptography.CryptographicException] { $rejected++ }
+    }
+    $ok = Write-Result "Rejected $rejected / $Attempts (v1 format would pass ~1 in 256 by chance)" ($rejected -eq $Attempts)
 
+    # File API: no output file may exist after a failed verification (REQ-1.7)
+    $testFile = New-TestPath $TestDir 'test_wrongpwd'
+    [System.IO.File]::WriteAllBytes($testFile, $content)
+    $encryptedFile = Protect-CUIFile -InputPath $testFile -Password $CorrectPassword -Iterations $Iter
+    Remove-Item $testFile -Force
+    $threw = $false
+    try { $null = Unprotect-CUIFile -InputPath $encryptedFile -Password "$CorrectPassword-wrong" } catch { $threw = $true }
+    $ok = (Write-Result "No output file written on failure" ($threw -and -not (Test-Path $testFile))) -and $ok
+    Remove-Item $encryptedFile -Force -ErrorAction SilentlyContinue
+    return $ok
+}
+
+function Test-Tamper {
+    param([string]$Password, [int]$Iter)
+
+    Write-Host ""
+    Write-Host "Test: Tamper Detection" -ForegroundColor Yellow
+    Write-Host ("-" * 50)
+
+    $content = New-Object byte[] 1000
+    $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create(); $rng.GetBytes($content); $rng.Dispose()
+    $locked = Protect-CUIBytes -Plaintext $content -Password $Password -Iterations $Iter
+    $hdr = $CRYPTO.HeaderBytes
+
+    $cases = [ordered]@{
+        'version byte'          = 4
+        'iteration count'       = 6
+        'salt'                  = 12
+        'IV'                    = 30
+        'first ciphertext byte' = $hdr
+        'last ciphertext byte'  = $locked.Length - $CRYPTO.TagBytes - 1
+        'tag'                   = $locked.Length - 1
+    }
+    $ok = $true
+    foreach ($name in $cases.Keys) {
+        $t = [byte[]]$locked.Clone()
+        $t[$cases[$name]] = $t[$cases[$name]] -bxor 0x01
+        $rejected = $false
+        try { $null = Unprotect-CUIBytes -Data $t -Password $Password } catch { $rejected = $true }
+        $ok = (Write-Result "Flipped one bit in $name (offset $($cases[$name]))" $rejected) -and $ok
+    }
+
+    $rejected = $false
+    try { $null = Unprotect-CUIBytes -Data ([byte[]]$locked[0..($locked.Length - 2)]) -Password $Password } catch { $rejected = $true }
+    $ok = (Write-Result "Truncated by one byte" $rejected) -and $ok
+
+    $rejected = $false
+    try { $null = Unprotect-CUIBytes -Data ([byte[]]($locked + [byte]0)) -Password $Password } catch { $rejected = $true }
+    $ok = (Write-Result "Extended by one byte" $rejected) -and $ok
+    return $ok
+}
+
+function Test-HeaderIterations {
+    param([string]$Password)
+
+    Write-Host ""
+    Write-Host "Test: Iteration Count Carried in Header" -ForegroundColor Yellow
+    Write-Host ("-" * 50)
+
+    $content = [System.Text.Encoding]::UTF8.GetBytes("iteration count test")
+    $ok = $true
+    foreach ($n in 1000, 123456, $CRYPTO.DefaultIterations) {
+        $locked = Protect-CUIBytes -Plaintext $content -Password $Password -Iterations $n
+        $info = Get-CUIFileInfo -Data $locked
+        $back = Unprotect-CUIBytes -Data $locked -Password $Password
+        $same = ([System.Text.Encoding]::UTF8.GetString($back) -eq "iteration count test")
+        $ok = (Write-Result "Iterations=$n read back as $($info.Iterations), decrypts" (($info.Iterations -eq $n) -and $same)) -and $ok
+    }
+    return $ok
+}
+
+function Test-LegacyV1 {
+    param([string]$TestDir, [string]$Password)
+
+    Write-Host ""
+    Write-Host "Test: Legacy Version-1 File" -ForegroundColor Yellow
+    Write-Host ("-" * 50)
+
+    $content = [System.Text.Encoding]::UTF8.GetBytes("legacy file written by SendCUIEmail v0.x")
+    $legacyFile = (New-TestPath $TestDir 'test_legacy') + '.Locked'
+    $decrypted = $null
     try {
-        # Create and encrypt
-        Write-Host "  [1/3] Creating and encrypting test file..." -NoNewline
-        [System.IO.File]::WriteAllBytes($testFile, $testContent)
-        $encryptedFile = Encrypt-TestFile -InputPath $testFile -Password $CorrectPassword
-        Remove-Item $testFile -Force
-        Write-Host " Done" -ForegroundColor Green
-
-        # Try wrong password
-        Write-Host "  [2/3] Attempting decryption with wrong password..." -NoNewline
-        $wrongPassword = $CorrectPassword + "WRONG"
-        $decryptedFile = Decrypt-TestFile -InputPath $encryptedFile -Password $wrongPassword
-
-        if ($null -eq $decryptedFile -or -not (Test-Path ($encryptedFile -replace '\.Locked$', ''))) {
-            Write-Host " Correctly rejected" -ForegroundColor Green
-            return $true
-        }
-        else {
-            # Check if content is garbage (padding error should have been thrown)
-            Write-Host " WARNING: Decryption did not fail but content may be corrupted" -ForegroundColor Yellow
-            return $false
-        }
+        New-LegacyV1File -Path $legacyFile -Content $content -Password $Password
+        $info = Get-CUIFileInfo -InputPath $legacyFile
+        $ok = Write-Result "Detected as v$($info.Version), authenticated=$($info.Authenticated)" (($info.Version -eq 1) -and -not $info.Authenticated)
+        $decrypted = Unprotect-CUIFile -InputPath $legacyFile -Password $Password -WarningAction SilentlyContinue
+        $same = ([System.IO.File]::ReadAllText($decrypted) -eq "legacy file written by SendCUIEmail v0.x")
+        $ok = (Write-Result "Decrypts with a warning" $same) -and $ok
+        return $ok
     }
     catch {
-        # Expected - wrong password should cause cryptographic exception
-        Write-Host " Correctly rejected (exception thrown)" -ForegroundColor Green
-        return $true
+        return Write-Result "Exception: $_" $false
     }
     finally {
-        if (Test-Path $testFile) { Remove-Item $testFile -Force -ErrorAction SilentlyContinue }
-        if ($encryptedFile -and (Test-Path $encryptedFile)) { Remove-Item $encryptedFile -Force -ErrorAction SilentlyContinue }
-        $potentialDecrypted = $encryptedFile -replace '\.Locked$', ''
-        if ($potentialDecrypted -and (Test-Path $potentialDecrypted)) { Remove-Item $potentialDecrypted -Force -ErrorAction SilentlyContinue }
+        foreach ($f in @($legacyFile, $decrypted)) { if ($f -and (Test-Path $f)) { Remove-Item $f -Force -ErrorAction SilentlyContinue } }
     }
 }
 
 # Main execution
 Write-Banner
 
-# Setup test directory
 if ([string]::IsNullOrEmpty($TestDir)) {
     $TestDir = Join-Path ([System.IO.Path]::GetTempPath()) "SendCUIEmail_Test_$([Guid]::NewGuid().ToString('N').Substring(0,8))"
 }
-
 Write-Host "Test directory: $TestDir" -ForegroundColor Gray
+if (-not (Test-Path $TestDir)) { New-Item -ItemType Directory -Path $TestDir -Force | Out-Null }
 
-if (-not (Test-Path $TestDir)) {
-    New-Item -ItemType Directory -Path $TestDir -Force | Out-Null
-}
-
-# Generate test password
 $testPassword = "TestPassword123!"
 Write-Host "Test password: $testPassword" -ForegroundColor Gray
+Write-Host "Test iterations: $Iterations (shipping default $($CRYPTO.DefaultIterations))" -ForegroundColor Gray
 
-# Run tests
 $results = @()
 
-# Test 1: Small text file
-$smallText = [System.Text.Encoding]::UTF8.GetBytes("Hello, World! This is a small test file.")
-$results += Test-RoundTrip -TestName "Small text file (40 bytes)" -OriginalContent $smallText -TestDir $TestDir -Password $testPassword
+$results += Test-RoundTrip -TestName "Small text file (40 bytes)" -OriginalContent ([System.Text.Encoding]::UTF8.GetBytes("Hello, World! This is a small test file.")) -TestDir $TestDir -Password $testPassword -Iter $Iterations
+$results += Test-RoundTrip -TestName "Empty file (0 bytes)" -OriginalContent (New-Object byte[] 0) -TestDir $TestDir -Password $testPassword -Iter $Iterations
+$results += Test-RoundTrip -TestName "One AES block (16 bytes)" -OriginalContent ([byte[]](1..16)) -TestDir $TestDir -Password $testPassword -Iter $Iterations
+$results += Test-RoundTrip -TestName "Multiple blocks (1 KB)" -OriginalContent ([byte[]](0..1023 | ForEach-Object { $_ % 256 })) -TestDir $TestDir -Password $testPassword -Iter $Iterations
 
-# Test 2: Empty file
-$emptyContent = @()
-$results += Test-RoundTrip -TestName "Empty file (0 bytes)" -OriginalContent $emptyContent -TestDir $TestDir -Password $testPassword
-
-# Test 3: Exactly one AES block (16 bytes)
-$oneBlock = [byte[]](1..16)
-$results += Test-RoundTrip -TestName "One AES block (16 bytes)" -OriginalContent $oneBlock -TestDir $TestDir -Password $testPassword
-
-# Test 4: Multiple blocks (1KB)
-$multiBlock = [byte[]](0..1023 | ForEach-Object { $_ % 256 })
-$results += Test-RoundTrip -TestName "Multiple blocks (1 KB)" -OriginalContent $multiBlock -TestDir $TestDir -Password $testPassword
-
-# Test 5: Larger file (100KB)
 $largerFile = New-Object byte[] 102400
-$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
-$rng.GetBytes($largerFile)
-$rng.Dispose()
-$results += Test-RoundTrip -TestName "Larger file (100 KB random data)" -OriginalContent $largerFile -TestDir $TestDir -Password $testPassword
+$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create(); $rng.GetBytes($largerFile); $rng.Dispose()
+$results += Test-RoundTrip -TestName "Larger file (100 KB random data)" -OriginalContent $largerFile -TestDir $TestDir -Password $testPassword -Iter $Iterations
+$results += Test-RoundTrip -TestName "Binary with null bytes" -OriginalContent ([byte[]](0, 1, 2, 0, 0, 255, 254, 253, 0, 128, 127, 0)) -TestDir $TestDir -Password $testPassword -Iter $Iterations
+$results += Test-RoundTrip -TestName "Shipping default iterations ($($CRYPTO.DefaultIterations))" -OriginalContent ([System.Text.Encoding]::UTF8.GetBytes("default iteration count")) -TestDir $TestDir -Password $testPassword -Iter 0
 
-# Test 6: Binary content with null bytes
-$binaryContent = [byte[]](0, 1, 2, 0, 0, 255, 254, 253, 0, 128, 127, 0)
-$results += Test-RoundTrip -TestName "Binary with null bytes" -OriginalContent $binaryContent -TestDir $TestDir -Password $testPassword
-
-# Test 7: Wrong password rejection
-$results += Test-WrongPassword -TestDir $TestDir -CorrectPassword $testPassword
+$results += Test-WrongPassword -TestDir $TestDir -CorrectPassword $testPassword -Iter $Iterations
+$results += Test-Tamper -Password $testPassword -Iter $Iterations
+$results += Test-HeaderIterations -Password $testPassword
+$results += Test-LegacyV1 -TestDir $TestDir -Password $testPassword
 
 # Summary
 Write-Host ""
@@ -321,20 +283,17 @@ $total = $results.Count
 if ($failed -eq 0) {
     Write-Host "ALL TESTS PASSED ($passed/$total)" -ForegroundColor Green
     Write-Host ""
-    Write-Host "The encryption/decryption pipeline is working correctly." -ForegroundColor Green
     Write-Host "Files encrypted with Encrypt.ps1 can be decrypted with Decrypt.ps1" -ForegroundColor Green
-    Write-Host "or the one-liner in the generated README.md." -ForegroundColor Green
+    Write-Host "or the one-liner in Decrypt_Instructions.html." -ForegroundColor Green
 }
 else {
     Write-Host "SOME TESTS FAILED ($passed passed, $failed failed out of $total)" -ForegroundColor Red
-    Write-Host ""
-    Write-Host "Please review the failures above and investigate." -ForegroundColor Red
 }
 
-# Cleanup test directory
 Write-Host ""
 Write-Host "Cleaning up test directory..." -ForegroundColor Gray
 Remove-Item $TestDir -Recurse -Force -ErrorAction SilentlyContinue
 
 Write-Host ""
 Write-Host "Test complete." -ForegroundColor Cyan
+if ($failed -ne 0) { exit 1 }

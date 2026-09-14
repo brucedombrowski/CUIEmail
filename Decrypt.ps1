@@ -4,8 +4,9 @@
     Decrypts .Locked files created by SendCUIEmail.
 
 .DESCRIPTION
-    Decrypts files encrypted with Encrypt.ps1 using AES-256-CBC with PBKDF2 key derivation.
-    This script uses the same FIPS 140-2 compliant algorithms as the encryption script.
+    Decrypts files encrypted with Encrypt.ps1. Version-2 files are authenticated (HMAC-SHA256
+    verified before decryption). Version-1 legacy files are decrypted with a warning.
+    The format is defined in Crypto.psm1.
 
     Cross-Platform:
     - Works on Windows PowerShell 5.1+ and PowerShell Core 7+ (macOS/Linux)
@@ -23,11 +24,8 @@ param(
     [string[]]$Path
 )
 
-# Configuration - must match Encrypt.ps1
-$ITERATIONS = 100000  # PBKDF2 iterations
-$KEY_SIZE = 32        # bytes (256 bits)
-$SALT_SIZE = 16       # bytes
-$IV_SIZE = 16         # bytes
+# Crypto.psm1 is the single source of truth for the .Locked format (v2 authenticated, v1 legacy)
+Import-Module (Join-Path $PSScriptRoot 'Crypto.psm1') -Force
 
 # Platform detection
 $IsWindowsPlatform = $PSVersionTable.PSEdition -eq 'Desktop' -or $IsWindows
@@ -83,55 +81,23 @@ function Decrypt-File {
     )
 
     try {
-        # Validate file exists and has .Locked extension
         if (-not (Test-Path $InputPath -PathType Leaf)) {
             Write-Host "ERROR: File not found: $InputPath" -ForegroundColor Red
             return $null
         }
-
         if ($InputPath -notlike "*.Locked") {
             Write-Host "ERROR: File does not have .Locked extension: $InputPath" -ForegroundColor Red
             return $null
         }
 
-        # Read encrypted file
-        $data = [System.IO.File]::ReadAllBytes($InputPath)
-
-        # Validate minimum file size (salt + IV + at least 1 block)
-        $minSize = $SALT_SIZE + $IV_SIZE + 16
-        if ($data.Length -lt $minSize) {
-            Write-Host "ERROR: File too small to be a valid encrypted file" -ForegroundColor Red
-            return $null
+        $info = Get-CUIFileInfo -InputPath $InputPath
+        if (-not $info.Authenticated) {
+            Write-Host ""
+            Write-Host "  WARNING: legacy version-1 file, no integrity protection. Ask the sender to re-encrypt." -ForegroundColor Yellow
         }
 
-        # Extract salt (first 16 bytes) and IV (next 16 bytes)
-        $salt = $data[0..($SALT_SIZE - 1)]
-        $iv = $data[$SALT_SIZE..($SALT_SIZE + $IV_SIZE - 1)]
-        $ciphertext = $data[($SALT_SIZE + $IV_SIZE)..($data.Length - 1)]
-
-        # Derive key using PBKDF2
-        $keyDeriver = [System.Security.Cryptography.Rfc2898DeriveBytes]::new(
-            $Password,
-            $salt,
-            $ITERATIONS,
-            [System.Security.Cryptography.HashAlgorithmName]::SHA256
-        )
-        $key = $keyDeriver.GetBytes($KEY_SIZE)
-
-        # Decrypt using AES-256-CBC
-        $aes = [System.Security.Cryptography.Aes]::Create()
-        $aes.Mode = [System.Security.Cryptography.CipherMode]::CBC
-        $aes.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
-        $aes.Key = $key
-        $aes.IV = $iv
-
-        $decryptor = $aes.CreateDecryptor()
-        $plainBytes = $decryptor.TransformFinalBlock($ciphertext, 0, $ciphertext.Length)
-
-        # Write decrypted file (removes .Locked extension)
         $outputPath = $InputPath -replace '\.Locked$', ''
-
-        # Check if output file already exists
+        $force = $false
         if (Test-Path $outputPath) {
             Write-Host "WARNING: Output file already exists: $outputPath" -ForegroundColor Yellow
             $overwrite = Read-Host "Overwrite? (y/N)"
@@ -139,18 +105,14 @@ function Decrypt-File {
                 Write-Host "Skipped." -ForegroundColor Yellow
                 return $null
             }
+            $force = $true
         }
 
-        [System.IO.File]::WriteAllBytes($outputPath, $plainBytes)
-
-        # Cleanup
-        $aes.Dispose()
-        $keyDeriver.Dispose()
-
-        return $outputPath
+        # Tag is verified before any plaintext is produced (REQ-1.7). Nothing is written on failure.
+        return Unprotect-CUIFile -InputPath $InputPath -Password $Password -OutputPath $outputPath -Force:$force -WarningAction SilentlyContinue
     }
     catch [System.Security.Cryptography.CryptographicException] {
-        Write-Host "ERROR: Decryption failed - wrong password or corrupted file" -ForegroundColor Red
+        Write-Host "ERROR: Decryption failed - wrong password or the file has been modified" -ForegroundColor Red
         return $null
     }
     catch {
@@ -244,7 +206,7 @@ Write-Host ""
 $decryptedFiles = @()
 $failedFiles = @()
 
-Write-Host "Decrypting files (AES-256-CBC, FIPS 140-2)..." -ForegroundColor Cyan
+Write-Host "Decrypting files (AES-256-CBC + HMAC-SHA256, FIPS 140-2)..." -ForegroundColor Cyan
 foreach ($file in $files) {
     Write-Host "  Decrypting: $(Split-Path $file -Leaf)..." -NoNewline
     $result = Decrypt-File -InputPath $file -Password $password
