@@ -1,0 +1,83 @@
+name: CI
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm test
+      - run: npm run build
+        env: { SCE_VERSION: "${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || '' }}" }
+      - uses: actions/upload-artifact@v4
+        with: { name: dist, path: dist/CUIEmail.html }
+
+  windows-powershell:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm test
+      - run: npm run build
+      - run: node test/make-fixtures.mjs
+      - name: Windows PowerShell 5.1 interop
+        shell: powershell
+        run: |
+          $PSVersionTable.PSVersion
+          powershell -NoProfile -ExecutionPolicy Bypass -File test/interop.ps1
+      - name: PowerShell 7 interop
+        shell: pwsh
+        run: pwsh -NoProfile -File test/interop.ps1
+
+  pages:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: [test, windows-powershell]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm run build && cp dist/CUIEmail.html dist/index.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: dist }
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [test, windows-powershell]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm run build
+        env: { SCE_VERSION: "${{ github.ref_name }}" }
+      - run: cp fallback/Unlock.ps1 dist/Unlock.ps1
+      - name: Release notes from CHANGELOG
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          awk -v v="$v" '/^## \[/{p=($0 ~ "\\["v"\\]")} p' CHANGELOG.md | tail -n +2 > notes.md
+          printf '\n## Download\n\nDownload **CUIEmail.html** and double-click it. That is the whole tool. `Unlock.ps1` is a PowerShell fallback for recipients who cannot open the page.\n' >> notes.md
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          body_path: notes.md
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          files: |
+            dist/CUIEmail.html
+            dist/Unlock.ps1

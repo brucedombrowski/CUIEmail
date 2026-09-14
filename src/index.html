@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CUIEmail</title>
+<style>/*__CSS__*/</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div class="brand">
+      <div class="brand-title">CUIEmail</div>
+      <div class="brand-sub">Lock Controlled Unclassified Information for email, and open locked files you receive.</div>
+    </div>
+    <button id="nav-home" class="link hidden" type="button">&larr; Start over</button>
+  </header>
+
+  <!-- HOME -->
+  <main id="view-home" class="view">
+    <div class="choice-grid">
+      <button id="go-send" class="choice" type="button">
+        <div class="choice-title">Send CUI files by email</div>
+        <div class="choice-desc">Check markings, lock the files with a passphrase, and prepare a correctly marked email.</div>
+      </button>
+      <button id="go-open" class="choice" type="button">
+        <div class="choice-title">Open a locked file I received</div>
+        <div class="choice-desc">Pick the <code>.locked</code> attachment, enter the passphrase you were given, save the original file.</div>
+      </button>
+    </div>
+    <p class="fine">Everything happens on this computer. Nothing is uploaded anywhere. Files are locked with AES-256 and a passphrase that you deliver by phone or text, never by email.</p>
+    <p class="fine"><button id="go-help" class="link" type="button">How this works, compliance references, and troubleshooting</button></p>
+  </main>
+
+  <!-- SEND -->
+  <main id="view-send" class="view hidden">
+
+    <section class="step" id="step-files">
+      <h2><span class="num">1</span> Choose the files to send</h2>
+      <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Choose files">
+        <div class="dz-big">Drop files here, or click to choose</div>
+        <div class="dz-small">Word, PowerPoint, Excel, PDF, or any other file. Each file is checked for a CUI banner.</div>
+        <input id="file-input" type="file" multiple class="visually-hidden">
+      </div>
+      <ul id="file-list" class="file-list"></ul>
+      <div id="file-ack-wrap" class="ack hidden">
+        <label><input id="file-ack" type="checkbox"> I confirm that every file above carries the CUI banner on each page and a designation indicator. <span class="muted">(This tool cannot add markings inside your documents.)</span></label>
+        <details class="help"><summary>How do I add the banner to a document?</summary>
+          <p><b>Word:</b> Insert &rarr; Header, type the banner (for example <code>CUI//SP-EXPT//FEDCON</code>), bold and centered. Repeat in the footer. If "Different First Page" is on, add it to the first-page header too.</p>
+          <p><b>PowerPoint:</b> View &rarr; Slide Master, add a text box with the banner at the top and bottom of the master so every slide inherits it.</p>
+          <p><b>Excel:</b> Page Layout &rarr; Print Titles &rarr; Header/Footer tab, on every sheet.</p>
+          <p><b>Designation indicator:</b> on the first page add lines such as <code>Controlled by: [your agency]</code>, <code>CUI Category: ...</code>, <code>POC: ...</code>. This tool prints the same block in the email.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="step" id="step-marking">
+      <h2><span class="num">2</span> What kind of CUI is it?</h2>
+      <p class="hint">Select every category that applies to any of the files. One banner covers the whole email.</p>
+      <div id="cat-common" class="chips"></div>
+      <div class="search-row">
+        <input id="cat-search" type="search" placeholder="Search all CUI Registry categories (name or marking)" autocomplete="off">
+        <div id="cat-results" class="search-results hidden"></div>
+      </div>
+      <div id="cat-selected" class="selected-list"></div>
+
+      <h3>Who may receive it? <span class="muted">(limited dissemination controls, optional)</span></h3>
+      <div id="ldc-list" class="ldc-list"></div>
+
+      <div class="banner-preview">
+        <div class="label">Banner marking</div>
+        <div id="banner" class="banner">CUI</div>
+      </div>
+      <div id="marking-msgs" class="msgs"></div>
+    </section>
+
+    <section class="step" id="step-designation">
+      <h2><span class="num">3</span> Who controls it?</h2>
+      <p class="hint">This becomes the designation indicator in the email. It is remembered on this computer for next time.</p>
+      <div class="form-grid">
+        <label>Controlled by (agency or organization) <span class="req">required</span>
+          <input id="d-controlledBy" type="text" placeholder="e.g. NASA Johnson Space Center" autocomplete="organization"></label>
+        <label>Controlled by (office or division) <span class="muted">optional</span>
+          <input id="d-controlledBy2" type="text" placeholder="e.g. ISS Payloads Office / OZ"></label>
+        <label>Point of contact (name and phone or email)
+          <input id="d-poc" type="text" placeholder="e.g. Jane Doe, 281-555-0100"></label>
+        <label>Decontrol date or event <span class="muted">optional</span>
+          <input id="d-decontrol" type="text" placeholder="e.g. 2036-09-14, or: upon public release of the report"></label>
+      </div>
+      <div id="designation-msgs" class="msgs"></div>
+    </section>
+
+    <section class="step" id="step-subject">
+      <h2><span class="num">4</span> Email subject</h2>
+      <div class="subject-row"><span class="subject-prefix">CUI -</span><input id="subject" type="text" placeholder="e.g. Test procedure for review" maxlength="150"></div>
+      <p class="hint">The subject is not encrypted. Do not put controlled information in it.</p>
+    </section>
+
+    <section class="step" id="step-pass">
+      <h2><span class="num">5</span> Passphrase</h2>
+      <p class="hint">Give this to the recipient by phone or text message. Never put it in the email.</p>
+      <div class="pass-box">
+        <div id="pass-display" class="pass-display"></div>
+        <div class="row">
+          <button id="pass-regen" class="secondary" type="button">Generate another</button>
+          <button id="pass-copy" class="secondary" type="button">Copy</button>
+          <button id="pass-custom-toggle" class="link" type="button">Use my own passphrase instead</button>
+        </div>
+        <div id="pass-custom" class="hidden">
+          <label>Passphrase (at least 12 characters) <input id="pass-1" type="password" autocomplete="new-password"></label>
+          <label>Type it again <input id="pass-2" type="password" autocomplete="new-password"></label>
+          <label class="inline"><input id="pass-show" type="checkbox"> Show</label>
+        </div>
+      </div>
+    </section>
+
+    <section class="step" id="step-go">
+      <h2><span class="num">6</span> Lock the files</h2>
+      <div id="go-msgs" class="msgs"></div>
+      <button id="go-lock" class="primary big" type="button">Lock files and prepare the email</button>
+      <div id="progress" class="progress hidden"></div>
+    </section>
+
+    <section class="step done hidden" id="step-done">
+      <h2><span class="num">&#10003;</span> Send the email</h2>
+      <div id="save-summary" class="save-summary"></div>
+      <ol class="todo">
+        <li>Open a new email and attach <b>every</b> file listed above (the <code>.locked</code> files and <code>CUIEmail.html</code>).</li>
+        <li>Use this subject and body (the button opens a draft in your mail program; if attachments or text are missing, use Copy):</li>
+      </ol>
+      <div class="row">
+        <button id="email-open" class="primary" type="button">Open email draft</button>
+        <button id="email-copy-subject" class="secondary" type="button">Copy subject</button>
+        <button id="email-copy-body" class="secondary" type="button">Copy email body</button>
+      </div>
+      <div class="email-preview">
+        <div class="label">Subject</div>
+        <pre id="email-subject"></pre>
+        <div class="label">Body</div>
+        <pre id="email-body"></pre>
+      </div>
+      <ol class="todo" start="3">
+        <li>Send it. Then call or text the recipient with the passphrase: <span id="pass-final" class="pass-inline"></span></li>
+        <li>Delete the <code>.locked</code> files from your computer when you no longer need them.</li>
+      </ol>
+    </section>
+  </main>
+
+  <!-- OPEN -->
+  <main id="view-open" class="view hidden">
+    <section class="step">
+      <h2><span class="num">1</span> Pick the locked file</h2>
+      <div id="open-dropzone" class="dropzone" tabindex="0" role="button" aria-label="Choose locked file">
+        <div class="dz-big">Drop the <code>.locked</code> file here, or click to choose</div>
+        <div class="dz-small">Save the attachment from the email first, then pick it here.</div>
+        <input id="open-input" type="file" class="visually-hidden">
+      </div>
+      <div id="open-info" class="hidden">
+        <div class="banner-preview"><div class="label">This file is marked</div><div id="open-banner" class="banner"></div></div>
+        <dl id="open-meta" class="meta"></dl>
+      </div>
+      <div id="open-msgs" class="msgs"></div>
+    </section>
+    <section class="step" id="open-step-pass">
+      <h2><span class="num">2</span> Enter the passphrase</h2>
+      <p class="hint">The sender gave it to you by phone or text. Words are separated by dashes; capitalization does not matter for generated passphrases.</p>
+      <div class="row">
+        <input id="open-pass" type="password" autocomplete="off" placeholder="passphrase" class="grow">
+        <label class="inline"><input id="open-show" type="checkbox"> Show</label>
+      </div>
+      <button id="open-unlock" class="primary big" type="button">Unlock and save</button>
+      <div id="open-result" class="msgs"></div>
+    </section>
+    <section class="step" id="open-after" >
+      <h3>After you unlock it</h3>
+      <p>The saved file is CUI. Handle it according to its banner marking and your organization's CUI procedures. Delete the <code>.locked</code> copy when you no longer need it.</p>
+      <p><button id="open-help" class="link" type="button">Trouble opening this page? PowerShell fallback</button></p>
+    </section>
+  </main>
+
+  <!-- HELP -->
+  <main id="view-help" class="view hidden">
+    <section class="step">
+      <h2>How it works</h2>
+      <p>Files are locked in this browser using AES-256-CBC with an HMAC-SHA256 integrity tag, and a key derived from the passphrase with PBKDF2-HMAC-SHA256 (600,000 iterations). All of it uses the browser's built-in Web Crypto implementation. No file or passphrase leaves this computer.</p>
+      <p>Password-based encryption is used when both parties cannot use certificate-based email encryption (S/MIME with PIV/CAC). When both can, prefer that.</p>
+      <h2>Marking rules this tool applies</h2>
+      <ul>
+        <li>Banner: <code>CUI//[SP-]CATEGORY/.../LDC/...</code>. Specified categories first (with <code>SP-</code>), then Basic; each group alphabetized; dissemination controls alphabetized. (32 CFR 2002.20(b); NARA CUI Marking Handbook pp. 5-12.)</li>
+        <li>The email body carries the banner at the top and the bottom and a designation indicator with "Controlled by", category, dissemination control, and POC. (32 CFR 2002.20(c),(d); NPR 2810.7 2.2.8; ISOO email tip sheet.)</li>
+        <li>The email is a transmittal document: it states that CUI is attached and that it is uncontrolled once the attachments are removed. (32 CFR 2002.20(j).)</li>
+        <li>The subject begins with "CUI" and must not contain controlled information.</li>
+        <li>REL TO and DISPLAY ONLY lists start with USA, then country trigraphs, then organization tetragraphs, alphabetized. (CUI Registry, Limited Dissemination Controls.)</li>
+        <li>Attorney-Client and Attorney-WP only with the Legal Privilege category; NOFORN never with REL TO or DISPLAY ONLY; FED ONLY never with FEDCON. (CUI Registry.)</li>
+        <li>Each attached document must already carry its own banner on every page. This tool checks Word, PowerPoint, Excel, PDF and text files for one and warns if it cannot find it. It never edits your documents.</li>
+      </ul>
+      <p>Full trace with quotations: <a id="help-compliance-link" href="https://github.com/brucedombrowski/CUIEmail/blob/main/docs/MARKING-COMPLIANCE.md" target="_blank" rel="noopener">docs/MARKING-COMPLIANCE.md</a>.</p>
+      <h2 id="fallback">PowerShell fallback (Windows)</h2>
+      <p>If you cannot open this page (for example, the attachment was stripped and the web address is blocked), a Windows PC can unlock a file with PowerShell. Open the Start menu, type <b>PowerShell</b>, press Enter, then paste this whole line and press Enter. It asks for the file path and the passphrase.</p>
+      <pre id="ps-oneliner" class="code"></pre>
+      <div class="row"><button id="ps-copy" class="secondary" type="button">Copy PowerShell command</button></div>
+      <h2>Source and updates</h2>
+      <p><a href="https://github.com/brucedombrowski/CUIEmail" target="_blank" rel="noopener">github.com/brucedombrowski/CUIEmail</a>. Latest hosted copy: <a id="help-hosted" href="#" target="_blank" rel="noopener"></a>.</p>
+    </section>
+  </main>
+
+  <footer class="foot">CUIEmail <span id="version"></span> &middot; MIT License &middot; No network access required.</footer>
+</div>
+<script type="module">/*__JS__*/</script>
+</body>
+</html>

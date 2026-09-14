@@ -1,0 +1,14 @@
+{
+  "name": "sendcuiemail",
+  "version": "1.0.0-beta.1",
+  "description": "Lock Controlled Unclassified Information for email in the browser, with strict CUI marking.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test test/",
+    "fixtures": "node test/make-fixtures.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

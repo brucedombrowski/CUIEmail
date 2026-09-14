@@ -1,0 +1,1219 @@
+[
+ {
+  "name": "Ammonium Nitrate",
+  "marking": "CRITAN",
+  "group": "Critical Infrastructure",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/ammonium-nitrate",
+  "desc": "Related to registration information of those who own and operate ammonium nitrate facilities, purchasers of ammonium nitrate, and the regulation of sales and transfers of ammonium nitrate."
+ },
+ {
+  "name": "Chemical-terrorism Vulnerability Information",
+  "marking": "CVI",
+  "group": "Critical Infrastructure",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/chemical-terrorism-vulnerability-information",
+  "desc": "In accordance with Section 550(c) of the Department of Homeland Security Appropriations Act of 2007, the following information, whether transmitted verbally, electronically, or in written form, shall constitute CVI, see (1) - (9)."
+ },
+ {
+  "name": "Critical Energy Infrastructure Information",
+  "marking": "CEII",
+  "group": "Critical Infrastructure",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/critical-energy-infrastructure-information",
+  "desc": "Critical energy infrastructure information means specific engineering, vulnerability, or detailed design information about proposed or existing critical infrastructure that: (i) Relates details about the production, generation, transportation, transmission, or distribution of energy; (ii) Could be useful to a person in planning an attack on critical infrastructure;... and (iii) Does not simply give the general location of the critical infrastructure."
+ },
+ {
+  "name": "Emergency Management",
+  "marking": "EMGT",
+  "group": "Critical Infrastructure",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/emergency-mgmt",
+  "desc": "Related to information concerning the continuity of executive branch operations during all-hazards emergencies or other situations that may disrupt normal operations."
+ },
+ {
+  "name": "General Critical Infrastructure Information",
+  "marking": "CRIT",
+  "group": "Critical Infrastructure",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/critical-infrastructure",
+  "desc": "Systems and assets, whether physical or virtual, so vital that the incapacity or destruction of such may have a debilitating impact on the security, economy, public health or safety, environment, or any combination of these matters, across any Federal, State, regional, territorial, or local jurisdiction."
+ },
+ {
+  "name": "Information Systems Vulnerability Information",
+  "marking": "ISVI",
+  "group": "Critical Infrastructure",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/info-systems-vulnerability-info",
+  "desc": "Related to information that if not protected, could result in adverse effects to information systems. Information system means a discrete set of information resources organized for the collection, processing, maintenance, use, sharing, dissemination, or disposition of information."
+ },
+ {
+  "name": "Physical Security",
+  "marking": "PHYS",
+  "group": "Critical Infrastructure",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/physical-security",
+  "desc": "Related to protection of federal buildings, grounds or property."
+ },
+ {
+  "name": "Protected Critical Infrastructure Information",
+  "marking": "PCII",
+  "group": "Critical Infrastructure",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/protected-critical-infrastructure-information",
+  "desc": "As defined by 6 USC 131-134, and 6 CFR 29, PCII relates to threats, vulnerabilities, or operational experience related to the national infrastructure. PCII offers protection to private sector infrastructure information voluntarily shared with government entities for purposes of homeland security."
+ },
+ {
+  "name": "SAFETY Act Information",
+  "marking": "SAFE",
+  "group": "Critical Infrastructure",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/safety-act-info",
+  "desc": "Defined as \u201cSAFETY Act Confidential Information\u201d in 6 CFR Part 25, the regulations implementing the Support Anti-terrorism by Fostering Effective Technologies Act of 2002, SAFETY Act Information includes any and all information and data voluntarily submitted to the Department of Homeland Security under this part (including Applications, Pre-Applications, other forms, supporting documents and other materials relating to any of the foregoing, and responses to requests for additional information), including, but not limited to, inventions, devices, Technology, know-how, designs, copyrighted information, trade secrets, confidential business information, analyses, test and evaluation results, man"
+ },
+ {
+  "name": "Toxic Substances",
+  "marking": "TSCA",
+  "group": "Critical Infrastructure",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/toxic-substances",
+  "desc": "Health, safety, and exposure information related to chemical substances, chemical mixtures, and articles as defined under the Toxic Substances Control Act (TSCA)."
+ },
+ {
+  "name": "Water Assessments",
+  "marking": "WATER",
+  "group": "Critical Infrastructure",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/water-assessments",
+  "desc": "Vulnerability Assessments on the risks and security of public drinking water systems, to include, but not be limited to, a review of pipes and constructed conveyances, physical barriers, water collection, pretreatment, treatment, storage and distribution facilities, electronic, computer or other automated systems which are utilized by the public water system, the use, storage, or handling of various chemicals, and the operation and maintenance of such system."
+ },
+ {
+  "name": "Controlled Technical Information",
+  "marking": "CTI",
+  "group": "Defense",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/controlled-technical-info",
+  "desc": "Controlled Technical Information means technical information with military or space application that is subject to controls on the access, use, reproduction, modification, performance, display, release, disclosure, or dissemination. Controlled technical information is to be marked with one of the distribution statements B through F, in accordance with Department of Defense Instruction 5230.24, \"Distribution Statements of Technical Documents.\" The term does not include information that is lawfully publicly available without restrictions. \"Technical Information\" means technical data or computer software, as those terms are defined in Defense Federal Acquisition Regulation Supplement clause 252"
+ },
+ {
+  "name": "DoD Critical Infrastructure Security Information",
+  "marking": "DCRIT",
+  "group": "Defense",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/dod-critical-infrastructure-security-information",
+  "desc": "Information that, if disclosed, would reveal vulnerabilities in the DoD critical infrastructure and, if exploited, would likely result in the significant disruption, destruction, or damage of or to DoD operations, property, or facilities, including information regarding the securing and safeguarding of explosives, hazardous chemicals, or pipelines, related to critical infrastructure or protected systems owned or operated on behalf of the DoD, including vulnerability assessments prepared by or on behalf of the DoD, explosives safety information (including storage and handling), and other site-specific information on or relating to installation security."
+ },
+ {
+  "name": "Naval Nuclear Propulsion Information",
+  "marking": "NNPI",
+  "group": "Defense",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/naval-nuclear-propulsion-info",
+  "desc": "Related to the safety of reactors and associated naval nuclear propulsion plants, and control of radiation and radioactivity associated with naval nuclear propulsion activities, including prescribing and enforcing standards and regulations for these areas as they affect the environment and the safety and health of workers, operators, and the general public."
+ },
+ {
+  "name": "Privileged Safety Information",
+  "marking": "PSI",
+  "group": "Defense",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/privileged-safety-info",
+  "desc": "PSI is information reflective of a deliberative process in the safety investigation or given to a safety investigator pursuant to a promise of confidentiality, which the safety privilege protects from being released outside safety channels or from being used for any purpose except mishap prevention."
+ },
+ {
+  "name": "Unclassified Controlled Nuclear Information - Defense",
+  "marking": "DCNI",
+  "group": "Defense",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/ucni-dod",
+  "desc": "Relating to Department of Defense special nuclear material (SNM), equipment, and facilities, as defined by 32 CFR 223."
+ },
+ {
+  "name": "Export Controlled",
+  "marking": "EXPT",
+  "group": "Export Control",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/export-control",
+  "desc": "Unclassified information concerning certain items, commodities, technology, software, or other information whose export could reasonably be expected to adversely affect the United States national security and nonproliferation objectives. To include dual use items; items identified in export administration regulations, international traffic in arms regulations (ITAR) and the munitions list; license applications; and sensitive nuclear technology information."
+ },
+ {
+  "name": "Export Controlled\u00a0Research",
+  "marking": "EXPTR",
+  "group": "Export Control",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/export-controlled-research",
+  "desc": "Related to the systematic investigation into and study of materials and sources in order to establish facts and reach new conclusions."
+ },
+ {
+  "name": "Bank Secrecy",
+  "marking": "FSEC",
+  "group": "Financial",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/bank-secrecy",
+  "desc": "Information that is provided to the government pursuant to the Bank Secrecy Act, including but not limited to, suspicious activity reports (SAR), currency transaction reports (CTR), reports of international transportation of currency or monetary instruments (CMIR), reports of cash payment over $10,000 received in trade or business, and reports of foreign bank and financial accounts (FBAR). Reports filed under the Bank Secrecy Act (BSA), codified in relevant part at 31 U.S.C. \u00a7 5311 et seq, are specifically exempt from disclosure under the Freedom of Information Act, codified at 5 U.S.C. \u00a7 552, and also may not be disclosed under any State, local, tribal, or territorial \u201cfreedom of informatio"
+ },
+ {
+  "name": "Budget",
+  "marking": "BUDG",
+  "group": "Financial",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/budget",
+  "desc": "Related to information concerning the federal budget, including authorizations and estimates of income and expenditures."
+ },
+ {
+  "name": "Comptroller General",
+  "marking": "COMPT",
+  "group": "Financial",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/comptroller-general",
+  "desc": "Concerning the Officer of the United States Government who is charged with duties relating to fiscal affairs, including auditing, examining accounts, and reporting the financial status of the United States Government."
+ },
+ {
+  "name": "Confidential Consumer Complaint Information",
+  "marking": "CCI",
+  "group": "Financial",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/confidential-consumer-complaint-information",
+  "desc": "Related to information concerning consumer complaints or inquiries concerning financial institutions or consumer financial products and services, and responses to them."
+ },
+ {
+  "name": "Confidential Supervisory Information",
+  "marking": "FSI",
+  "group": "Financial",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/confidential-supervisory-information",
+  "desc": "Related to information connected to an agency's responsibilities to supervise, examine, and evaluate a financial institution."
+ },
+ {
+  "name": "Consumer Complaint Information",
+  "marking": "CCI",
+  "group": "Financial",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/consumer-complaint-information",
+  "desc": "Related to information concerning consumer complaints or inquiries concerning financial institutions or consumer financial products and services, and responses to them."
+ },
+ {
+  "name": "Electronic\u00a0Funds Transfer",
+  "marking": "XFER",
+  "group": "Financial",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/electronic-funds-transfer",
+  "desc": "Relating to the computer-based systems used to perform financial transactions electronically."
+ },
+ {
+  "name": "Federal Housing Finance Non-Public Information",
+  "marking": "FHFANPI",
+  "group": "Financial",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/fhfa-nonpublic-info",
+  "desc": "Related to information that the Federal Housing Finance Agency (FHFA) has not made public that is created by, obtained by, or communicated to an FHFA employee in connection with the performance of official duties, regardless of who is in possession of the information, including confidential supervisory information. Confidential supervisory information includes FHFA reports of examination, inspection and visitation, confidential operating and condition reports, and any information derived from, related to, or contained in such reports, or gathered by FHFA in the course of any investigation, suspicious activity report, cease-and- desist order, civil money penalty enforcement order, suspension,"
+ },
+ {
+  "name": "Financial Supervision Information",
+  "marking": "FSI",
+  "group": "Financial",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/financial-supervision-information",
+  "desc": "Related to information connected to an agency's responsibilities to supervise, examine, and evaluate a financial institution."
+ },
+ {
+  "name": "General Financial Information",
+  "marking": "FNC",
+  "group": "Financial",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/financial",
+  "desc": "Related to the duties, transactions, or otherwise falling under the purview of financial institutions or United States Government fiscal functions. Uses may include, but are not limited to, customer information held by a financial institution."
+ },
+ {
+  "name": "International Financial Institutions",
+  "marking": "FINT",
+  "group": "Financial",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/international-financial-institutions",
+  "desc": "Relating to entities that provide financial services for its clients or members, and were established (or chartered) by more than one country, and hence are subjects of international law."
+ },
+ {
+  "name": "Mergers",
+  "marking": "MERG",
+  "group": "Financial",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/mergers",
+  "desc": "Relating to methods by which corporations legally unify ownership of assets formerly subject to separate controls."
+ },
+ {
+  "name": "Net Worth",
+  "marking": "NETW",
+  "group": "Financial",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/net-worth",
+  "desc": "Related to the net worth of an individual and/or their affiliates in certain administrative proceedings."
+ },
+ {
+  "name": "Retirement",
+  "marking": "RTR",
+  "group": "Financial",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/retirement",
+  "desc": "Related to post-employment funding provided by an employer."
+ },
+ {
+  "name": "Asylee",
+  "marking": "ASYL",
+  "group": "Immigration",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/asylee",
+  "desc": "Related to refugee applications and associated hearings to grant asylum to foreign nationals in the United States to be recognized as asylees."
+ },
+ {
+  "name": "Battered Spouse or Child",
+  "marking": "BATT",
+  "group": "Immigration",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/battered-spouse-or-child",
+  "desc": "Related to information within applications and associated hearings provided by, or that could identify, a battered spouse or child of a US citizen or US permanent resident seeking independent protected status within the United States."
+ },
+ {
+  "name": "Permanent Resident Status",
+  "marking": "RESD",
+  "group": "Immigration",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/permanent-resident-status",
+  "desc": "Related to applications and associated hearings to grant permanent residency to foreign nationals living in the United States."
+ },
+ {
+  "name": "Status Adjustment",
+  "marking": "ADJ",
+  "group": "Immigration",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/status-adjustment",
+  "desc": "Related to applications for the adjustment of immigration status."
+ },
+ {
+  "name": "Temporary Protected Status",
+  "marking": "PROT",
+  "group": "Immigration",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/temporary-protected-status",
+  "desc": "Related to findings that conditions in a given country pose a danger to personal safety due to ongoing armed conflict or an environmental disaster and persons should receive special temporary status to remain in the United States."
+ },
+ {
+  "name": "Victims of Human Trafficking",
+  "marking": "IVIC",
+  "group": "Immigration",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/victims-of-human-trafficking",
+  "desc": "Related to identifiable information of persons who have been victims of human trafficking and their family members."
+ },
+ {
+  "name": "Visas",
+  "marking": "VISA",
+  "group": "Immigration",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/visas",
+  "desc": "Related to applications or permits to enter the United States."
+ },
+ {
+  "name": "Agriculture",
+  "marking": "AG",
+  "group": "Intelligence",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/agriculture",
+  "desc": "Information related to the agricultural operation, farming or conservation practices, or the actual land of an agricultural producer or landowner."
+ },
+ {
+  "name": "Foreign Intelligence Surveillance Act",
+  "marking": "FISA",
+  "group": "Intelligence",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/foreign-intelligence-surveillance-act",
+  "desc": "Related to unclassified and declassified information that is collected from unconsenting individuals under the authority of the Foreign Intelligence Surveillance Act (FISA)."
+ },
+ {
+  "name": "Foreign Intelligence Surveillance Act Business Records",
+  "marking": "FISAB",
+  "group": "Intelligence",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/foreign-intelligence-surveillance-act-business-records",
+  "desc": "Related to books, records, papers, documents, and other items produced for an investigation to obtain foreign intelligence information."
+ },
+ {
+  "name": "General Intelligence",
+  "marking": "INTEL",
+  "group": "Intelligence",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/intelligence",
+  "desc": "Related to intelligence activities, sources, or methods."
+ },
+ {
+  "name": "Geodetic Product Information",
+  "marking": "GEO",
+  "group": "Intelligence",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/geodetic-product-info",
+  "desc": "Related to imagery, imagery intelligence, or geospatial information."
+ },
+ {
+  "name": "Intelligence Financial Records",
+  "marking": "IFNC",
+  "group": "Intelligence",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/intelligence-financial-records",
+  "desc": "Related to financial records obtained for intelligence or counterintelligence activity, investigation, or analysis."
+ },
+ {
+  "name": "Internal Data",
+  "marking": "ID",
+  "group": "Intelligence",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/internal-data",
+  "desc": "Refers to a category of information that is not intended to be disseminated beyond CIA channels that involves intelligence activities, sources, or methods. This information may also relate to the CIA's organization, functions, names, official titles, salaries, or numbers of personnel."
+ },
+ {
+  "name": "Operations Security",
+  "marking": "OPSEC",
+  "group": "Intelligence",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/opsec",
+  "desc": "Critical information determined to give evidence of the planning and execution of sensitive (frequently classified) government activities after going through a formal systematic vetting process in accordance with National Security Presidential Memorandum Number 28. This process identifies unclassified information that must be protected. It almost always results from an agency\u2019s official OPSEC program, or is otherwise commonly approved for use by the CUI Senior Agency Official."
+ },
+ {
+  "name": "International Agreement Information",
+  "marking": "INTL",
+  "group": "International Agreements",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/international-agreements",
+  "desc": "Information provided by, otherwise made available by, or produced in cooperation with, a foreign government or international organization that requires protection pursuant to an existing treaty, agreement, bilateral exchange or other obligation under the requirements stipulated in 10 USC 130c(b), when not subject to classification under Executive Order 13526. Title 10 USC 130c(b) may exempt this class of foreign government information from the safeguard provisions otherwise required by Executive Order 13526. Per Title 10 USC 130c(h) the following national security officials are the only ones defined by statute as able to determine such information requires control: (A) The Secretary of Defen"
+ },
+ {
+  "name": "Accident Investigation",
+  "marking": "AIV",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/accident-investigation",
+  "desc": "Related to information obtained during the course of an accident or incident investigation. Including but not limited to information related to wreckage, records, mail, or cargo."
+ },
+ {
+  "name": "Campaign Funds",
+  "marking": "FUND",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/campaign-funds",
+  "desc": "Related to information obtained in connection to an investigation into campaign finance and disclosure laws. Usage may include but is not limited to notification or investigation pertaining to financial support of a candidate for election."
+ },
+ {
+  "name": "Committed Person",
+  "marking": "CMPRS",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/committed-person",
+  "desc": "Related to information concerning the mental condition of a person committed to a psychiatric facility."
+ },
+ {
+  "name": "Communications",
+  "marking": "LCOMM",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/communications",
+  "desc": "Related to the contents of any wire, oral, or electronic communication."
+ },
+ {
+  "name": "Controlled Substances",
+  "marking": "SUB",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/controlled-substances",
+  "desc": "Information obtained by the Drug Enforcement Administration (DEA) or in DEA investigative reports related to controlled substances."
+ },
+ {
+  "name": "Criminal History Records Information",
+  "marking": "CHRI",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/criminal-history-records-info",
+  "desc": "Related to information collected by criminal justice agencies on individuals consisting of identifiable descriptions and notations of arrests, detentions, indictments, informations, or other formal criminal charges, and any disposition arising therefrom, including acquittal, sentencing, correctional supervision, and release."
+ },
+ {
+  "name": "DNA",
+  "marking": "LDNA",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/dna",
+  "desc": "Related to hereditary material in humans that is used for law enforcement purposes."
+ },
+ {
+  "name": "General Law Enforcement",
+  "marking": "LEI",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/general-law-enforcement",
+  "desc": "Related to techniques and procedures for law enforcement operations, investigations, prosecutions, or enforcement actions."
+ },
+ {
+  "name": "Informant",
+  "marking": "INF",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/informant",
+  "desc": "Related to the identity of a human source."
+ },
+ {
+  "name": "Investigation",
+  "marking": "INV",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/investigation",
+  "desc": "Related to information obtained during the course of a law enforcement investigation or action, civil or criminal."
+ },
+ {
+  "name": "Juvenile",
+  "marking": "JUV",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/juvenile",
+  "desc": "Related to the identity of individual juvenile youths."
+ },
+ {
+  "name": "Law Enforcement Financial Records",
+  "marking": "LFNC",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/law-enforcement-financial-records",
+  "desc": "Related to financial records obtained for law enforcement purposes."
+ },
+ {
+  "name": "National Security Letter",
+  "marking": "LNSL",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/national-security-letter",
+  "desc": "Related to administrative orders sent to compel the recipients of the letters to provide information to federal investigators."
+ },
+ {
+  "name": "Pen Register/Trap & Trace",
+  "marking": "TRACE",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/pen-register-trap-and-trace",
+  "desc": "Related to devices used to identify incoming and outgoing telephone numbers."
+ },
+ {
+  "name": "Reward",
+  "marking": "RWRD",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/reward",
+  "desc": "Related to the identity of a recipient of a reward."
+ },
+ {
+  "name": "Sex Crime Victim",
+  "marking": "SCV",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/sex-crime-victim",
+  "desc": "Related to the identity of a victim of a sex offense."
+ },
+ {
+  "name": "Terrorist Screening",
+  "marking": "LSCRN",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/terrorist-screening",
+  "desc": "Related to information gathering and analysis concerning possible threats or acts of a destructive nature."
+ },
+ {
+  "name": "Whistleblower Identity",
+  "marking": "WHSTL",
+  "group": "Law Enforcement",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/whistleblower-identity",
+  "desc": "Identity of anyone providing information relating to a legal violation or illicit or unsafe activity, including information provided by a whistleblower which could reasonably be expected to reveal the identity of a whistleblower."
+ },
+ {
+  "name": "Administrative Proceedings",
+  "marking": "ADPO",
+  "group": "Legal",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/admin-proceedings",
+  "desc": "Adjudication of agency-related matters including, but not limited to, dispute resolution, settlements, and issuances of orders."
+ },
+ {
+  "name": "Child Pornography",
+  "marking": "CHLD",
+  "group": "Legal",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/child-pornography",
+  "desc": "From 18 USC 2256(8) \"child pornography\" means any visual depiction, including any photograph, film, video, picture, or computer or computer-generated image or picture, whether made or produced by electronic, mechanical, or other means, of sexually explicit conduct, where\u2014 (A) the production of such visual depiction involves the use of a minor engaging in sexually explicit conduct; (B) such visual depiction is a digital image, computer image, or computer-generated image that is, or is indistinguishable from, that of a minor engaging in sexually explicit conduct; or (C) such visual depiction has been created, adapted, or modified to appear that an identifiable minor is engaging in sexually exp"
+ },
+ {
+  "name": "Child Victim/Witness",
+  "marking": "CVIC",
+  "group": "Legal",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/child-victim-witness",
+  "desc": "Information pertaining to a minor who was a victim, witness, or potential witness to a criminal act."
+ },
+ {
+  "name": "Collective Bargaining",
+  "marking": "BARG",
+  "group": "Legal",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/collective-bargaining",
+  "desc": "Defining agencies' and representatives' duty to negotiate in good faith to include disclosure of certain labor relations training and guidance materials and limiting the issuance of certain subpoenas."
+ },
+ {
+  "name": "Federal Grand Jury",
+  "marking": "JURY",
+  "group": "Legal",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/federal-grand-jury",
+  "desc": "Material obtained pursuant to a federal grand jury subpoena, which includes (1) any reference to a specific sitting grand jury; (2) any documentation or data obtained by a grand jury subpoena if disclosure of such material tends to reveal what transpired before or at the direction of the federal grand jury; (3) documentation prepared specifically for the federal grand jury; and (4) transcripts or other recordings of testimony presented to the federal grand jury."
+ },
+ {
+  "name": "Legal Privilege",
+  "marking": "PRIVILEGE",
+  "group": "Legal",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/legal-privilege",
+  "desc": "Per 15 USC 78x(f)(4): The term \"privilege\" includes any work-product privilege, attorney-client privilege, governmental privilege, or other privilege recognized under Federal, State, or foreign law. Per 502(g): (1) \"attorney-client privilege\" means the protection that applicable law provides for confidential attorney-client communications, and (2) \"work-product protection\" means the protection that applicable law provides for tangible material (or its intangible equivalent) prepared in anticipation of litigation or for trial. Note: There are two limited dissemination control markings that can be used with this category; Attorney Work Product (AWP), Attorney Client Privilege (AC). These limit"
+ },
+ {
+  "name": "Legislative Materials",
+  "marking": "LMI",
+  "group": "Legal",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/legislative-materials",
+  "desc": "Data related to Congress\u2019s legislative, investigatory or oversight responsibilities of the Executive branch of the Federal government. This includes data related to proposed or pending legislation as well as inquiries submitted by Congress to Federal agencies, agency responses to those inquiries and any other information which, if disclosed, would reveal the nature and scope of Congressional inquiries."
+ },
+ {
+  "name": "Presentence Report",
+  "marking": "PRE",
+  "group": "Legal",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/presentence-report",
+  "desc": "A report, generally prepared to assist the court in determining the most appropriate sentence for a defendant. It can include an assessment of the nature and seriousness of the offense and should contain details summarizing the background information of the defendant and the crime."
+ },
+ {
+  "name": "Prior Arrest",
+  "marking": "PRIOR",
+  "group": "Legal",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/prior-arrest",
+  "desc": "Information related to previous instances of law enforcement official's apprehension and formal processing of a suspect."
+ },
+ {
+  "name": "Protective Order",
+  "marking": "LPROT",
+  "group": "Legal",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/protective-order",
+  "desc": "Stipulation that certain information that would normally fall under discovery rules will not be disclosed for specifically stated reason."
+ },
+ {
+  "name": "Victim",
+  "marking": "LVIC",
+  "group": "Legal",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/victim",
+  "desc": "Information requiring protection of the name or other details that may identify one who was the victim of a crime."
+ },
+ {
+  "name": "Witness Protection",
+  "marking": "WIT",
+  "group": "Legal",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/witness-protection",
+  "desc": "Information related to the secretive details associated with one who has testified or may testify under circumstances that require secrecy of that individual and details pertaining to that person."
+ },
+ {
+  "name": "Archaeological Resources",
+  "marking": "ARCHR",
+  "group": "Natural and Cultural Resources",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/archaeological-resources",
+  "desc": "Related to information about the nature and location of any archaeological resource for which the excavation or removal requires a permit or other permission."
+ },
+ {
+  "name": "Historic Properties",
+  "marking": "HISTP",
+  "group": "Natural and Cultural Resources",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/historic-properties",
+  "desc": "Related to the location, character, or ownership of historic property."
+ },
+ {
+  "name": "National Park System Resources",
+  "marking": "NPSR",
+  "group": "Natural and Cultural Resources",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/national-park-system-resources",
+  "desc": "Related to information concerning the nature and specific location of a National Park System resource that is endangered, threatened, rare, or commercially valuable, of mineral or paleontological objects within System units, or of objects of cultural patrimony within System units."
+ },
+ {
+  "name": "NATO Restricted",
+  "marking": "M",
+  "group": "North Atlantic Treaty Organization (NATO)",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/nato-restricted",
+  "desc": "Per the United States Security Authority for NATO, Instruction 1-07, information classified as \"\"NATO Restricted\"\", the fourth level of classification under the North Atlantic Treaty, requires safeguards and protection from public release and disclosure. This category does not apply to information classified NATO Confidential, NATO SECRET or NATO COSMIC TOP SECRET."
+ },
+ {
+  "name": "NATO Unclassified",
+  "marking": "M",
+  "group": "North Atlantic Treaty Organization (NATO)",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/nato-unclassified",
+  "desc": "Per the United States Security Authority for NATO, Instruction 1-07, this is information classified as \"NATO Unclassified\", which may only be used for official NATO purposes and may carry administrative or dissemination limitation markings."
+ },
+ {
+  "name": "General Nuclear",
+  "marking": "NUC",
+  "group": "Nuclear",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/nuclear",
+  "desc": "Related to protection of information concerning nuclear reactors, materials, or security."
+ },
+ {
+  "name": "Nuclear Recommendation Material",
+  "marking": "RECCOM",
+  "group": "Nuclear",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/nuclear-recommendation-material",
+  "desc": "Related to recommendations to the Secretary of Energy with respect to Department of Energy defense nuclear facilities as determined necessary to ensure adequate protection of public health and safety."
+ },
+ {
+  "name": "Nuclear Security-Related Information",
+  "marking": "SRI",
+  "group": "Nuclear",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/nuclear-security-related-info.html",
+  "desc": "Related to information that could be useful, or could reasonably be expected to be useful, to a terrorist in a potential attack that does not qualify as Safeguards or classified information, including the exact location and quantities of radioactive material, certain detailed design drawings, information on nearby facilities, emergency planning information, and certain assessments of vulnerability and safety analyses."
+ },
+ {
+  "name": "Safeguards Information",
+  "marking": "SGI",
+  "group": "Nuclear",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/safeguards-info",
+  "desc": "Pursuant to 42 USC 2011, et seq., and as defined in 10 CFR 73.2, SGI relates to security related information concerning the physical protection of source, byproduct or special nuclear material and the detailed security measures for facilities and information contained within security plans."
+ },
+ {
+  "name": "Unclassified Controlled Nuclear Information - Energy",
+  "marking": "UCNI",
+  "group": "Nuclear",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/ucni-doe",
+  "desc": "Relating to certain design and security information concerning nuclear facilities, materials, and weapons, specific to the Department of Energy."
+ },
+ {
+  "name": "Inventions",
+  "marking": "INVENT",
+  "group": "Patent",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/inventions",
+  "desc": "An invention is any art or process (way of doing or making things), machine, manufacture, design, or composition of matter, or any new and useful improvement thereof, or any variety of plant, which is or may be patentable under the patent laws of the United States, in which the federal government owns or may own a right, title, or interest."
+ },
+ {
+  "name": "Patent Applications",
+  "marking": "APP",
+  "group": "Patent",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/patent-application",
+  "desc": "Application for patent filed under 35 U.S.C. 111(a) that includes all types of patent applications (i.e., utility, design, plant, and reissue) except provisional applications. The nonprovisional application establishes the filing date and initiates the examination process. A nonprovisional utility patent application must include a specification, including a claim or claims; drawings, when necessary; an oath or declaration; and the prescribed filing fee."
+ },
+ {
+  "name": "Secrecy Orders",
+  "marking": "PSEC",
+  "group": "Patent",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/secrecy-orders",
+  "desc": "An order by the Commissioner of Patents that an invention be kept secret and to withhold the publication of an application or the grant of a patent due to national security concerns."
+ },
+ {
+  "name": "Contract Use",
+  "marking": "CONTRACT",
+  "group": "Privacy",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/contract-use",
+  "desc": "Stipulations for a contractor to meet before material may be used in performance of certain contracts."
+ },
+ {
+  "name": "Death Records",
+  "marking": "DREC",
+  "group": "Privacy",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/death-records",
+  "desc": "Related to information contained within an official document issued by a public registry verifying that a person has died, with information such as the date and time of death, the cause of death, and the signature of the attending or examining physician."
+ },
+ {
+  "name": "General Privacy",
+  "marking": "PRVCY",
+  "group": "Privacy",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/privacy",
+  "desc": "Refers to personal information, or, in some cases, \"personally identifiable information,\" as defined in OMB M-17-12, or \"means of identification\" as defined in 18 USC 1028(d)(7)."
+ },
+ {
+  "name": "Genetic Information",
+  "marking": "GENETIC",
+  "group": "Privacy",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/genetic-info",
+  "desc": "The term \"genetic information\" means, with respect to any individual, information about-- (i) such individual's genetic tests, (ii) the genetic tests of family members of such individual, and (iii) the manifestation of a disease or disorder in family members of such individual."
+ },
+ {
+  "name": "Health Information",
+  "marking": "HLTH",
+  "group": "Privacy",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/health-info",
+  "desc": "As per 42 USC 1320d(4), \"health information\" means any information, whether oral or recorded in any form or medium, that (A) is created or received by a health care provider, health plan, public health authority, employer, life insurer, school or university, or health care clearinghouse; and (B) relates to the past, present, or future physical or mental health or condition of an individual, the provision of health care to an individual, or the past, present, or future payment for the provision of health care to an individual."
+ },
+ {
+  "name": "Inspector General Protected",
+  "marking": "PRIIG",
+  "group": "Privacy",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/inspector-general-protected",
+  "desc": "Related to the identity of a person making a report to the Inspector General of any Executive agency."
+ },
+ {
+  "name": "Military Personnel Records",
+  "marking": "MIL",
+  "group": "Privacy",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/military-personnel-records",
+  "desc": "Any member or former member of the armed forces or affiliated organization of the Department of Defense."
+ },
+ {
+  "name": "Personnel Records",
+  "marking": "PERS",
+  "group": "Privacy",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/personnel-records",
+  "desc": "Related to the employees of federal agencies."
+ },
+ {
+  "name": "Student Records",
+  "marking": "STUD",
+  "group": "Privacy",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/student-records",
+  "desc": "As per 20 USC 1232g, the Family Educational Rights and Privacy Act of 1974, an education record which is comprised of those records which are directly related to a student."
+ },
+ {
+  "name": "General Procurement and Acquisition",
+  "marking": "PROCURE",
+  "group": "Procurement and Acquisition",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/procurement-acquisition",
+  "desc": "Material and information relating to, or associated with, the acquisition and procurement of goods and services, including but not limited to, cost or pricing data, contract information, indirect costs and direct labor rates."
+ },
+ {
+  "name": "Small Business Research and Technology",
+  "marking": "SBIZ",
+  "group": "Procurement and Acquisition",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/small-business-research-and-technology",
+  "desc": "Relating to certain \"Small Business Innovation Research Program\" and \"Small Business Technology Transfer Program\" information in a government database, as referenced in 15 USC 638(k)(2)."
+ },
+ {
+  "name": "Source Selection",
+  "marking": "SSEL",
+  "group": "Procurement and Acquisition",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/source-selection",
+  "desc": "Per FAR 2.101: any of the following information that is prepared for use by an agency for the purpose of evaluating a bid or proposal to enter into an agency procurement contract, if that information has not been previously made available to the public or disclosed publicly: (Items 1-10)."
+ },
+ {
+  "name": "Entity Registration Information",
+  "marking": "CONREG",
+  "group": "Proprietary Business Information",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/entity-registration-info",
+  "desc": "Relating to non-public information collected during entity registration in the System for Award Management (SAM), the common source of vendor data for the United States Government."
+ },
+ {
+  "name": "General Proprietary Business Information",
+  "marking": "PROPIN",
+  "group": "Proprietary Business Information",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/proprietary-business-info",
+  "desc": "Material and information relating to, or associated with, a company's products, business, or activities, including but not limited to financial information; data or statements; trade secrets; product research and development; existing and future product designs and performance specifications."
+ },
+ {
+  "name": "Ocean Common Carrier Service Contracts",
+  "marking": "SERV",
+  "group": "Proprietary Business Information",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/ocean-common-carrier-service-contracts",
+  "desc": "Relating to an agreement for the provision of services filed with the Federal Maritime Commission as referenced in 46 USC 40502(b), 46 CFR 530.4, and/or 46 CFR 531.4(a)."
+ },
+ {
+  "name": "Ocean Common Carrier and Marine Terminal Operator Agreements",
+  "marking": "OCCMTO",
+  "group": "Proprietary Business Information",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/occ-mto-agreements",
+  "desc": "Relating to agreements between or among ocean common carriers and marine terminal operators as referenced in 46 USC 40301 and 40306."
+ },
+ {
+  "name": "Proprietary Postal",
+  "marking": "POST",
+  "group": "Proprietary Business Information",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/proprietary-postal",
+  "desc": "Concerning or related to the course of business of the United States Postal Service."
+ },
+ {
+  "name": "Proprietary\u00a0Manufacturer",
+  "marking": "MFC",
+  "group": "Proprietary Business Information",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/proprietary-manufacturer",
+  "desc": "Relating to the production of a consumer product to include that of a private labeler."
+ },
+ {
+  "name": "Investment Survey",
+  "marking": "SURV",
+  "group": "Statistical",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/investment-survey",
+  "desc": "Information reported to Treasury, the Federal Reserve Board of Governors, or the Federal Reserve Banks as part of the Treasury International Capital (TIC) data reporting system."
+ },
+ {
+  "name": "Pesticide Producer Survey",
+  "marking": "PEST",
+  "group": "Statistical",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/pesticide-producer-survey",
+  "desc": "Related to the data gathered regarding the production of pesticides that specifies the non-disclosure of the identity and location of individual producers."
+ },
+ {
+  "name": "Statistical Information",
+  "marking": "STAT",
+  "group": "Statistical",
+  "kinds": [
+   "Basic",
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/statistical",
+  "desc": "Refers to information collected by a Federal statistical agency, unit, or program for statistical purposes or used for statistical activities; under law, regulation, or Government-wide policy such 'Statistical' CUI requires: (1) protection from unauthorized disclosure; (2) special handling safeguards; and/or (3) prescribed limits on access or dissemination."
+ },
+ {
+  "name": "US Census",
+  "marking": "CENS",
+  "group": "Statistical",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/census",
+  "desc": "Related to information gathered by the Bureau of the Census during the process of collecting, compiling, evaluating, analyzing of demographic, economic, and social data pertaining at a specified time to any or all persons in the United States and dissemination is limited to those with special sworn status, who may only use the data for statistical purposes and only for those statistical purposes for which the data was supplied."
+ },
+ {
+  "name": "Federal Taxpayer Information",
+  "marking": "TAX",
+  "group": "Tax",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/federal-taxpayer-info",
+  "desc": "Related to returns and return information which are submitted, gathered, or generated in conjunction with taxpayers\u2019 responsibilities to comply with federal tax provisions in the United States Code. \u201cReturns\u201d includes information that is provided to the government pursuant to Title 26, including tax or information returns, declarations of estimated tax, or claims for refund. \u201cReturn information\u201d includes a taxpayer\u2019s identity, the nature, source, or amount of income, or any information received by, recorded by, prepared by, or furnished to the Internal Revenue Service relevant to the determination of tax liability including whether the taxpayer is the subject of investigation. This protectio"
+ },
+ {
+  "name": "Tax Convention",
+  "marking": "CONV",
+  "group": "Tax",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/tax-convention",
+  "desc": "Related to any--(A) agreement entered into with the competent authority of one or more foreign governments pursuant to a tax convention, (B) application for relief under a tax convention, (C) background information related to such agreement or application, (D) document implementing such agreement, and (E) other information exchanged pursuant to a tax convention which is treated as confidential or secret under the tax convention. Tax convention information originating with the IRS generally retains its confidential status even when it resides with agencies other than the IRS."
+ },
+ {
+  "name": "Taxpayer Advocate Information",
+  "marking": "TAI",
+  "group": "Tax",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/taxpayer-advocate-info",
+  "desc": "A local taxpayer advocate (LTA) has the discretion to not disclose to the IRS contact with or information provided by, a taxpayer. Such discretion may result in declinations of requests for information by IRS personnel including cases involving criminal tax investigations or those where the failure to provide information to the IRS would be beneficial to the taxpayer but to the detriment of the IRS. Such discretion does not extend to cases where the LTA believes a taxpayer is using the Taxpayer Advocate\u2019s office to perpetuate fraud on the government or in cases where the information is sought in litigation."
+ },
+ {
+  "name": "Written Determinations",
+  "marking": "WDT",
+  "group": "Tax",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/written-determinations",
+  "desc": "Rulings, determination letters, technical advice memoranda or Chief Counsel Advice, as those terms are defined in Treasury Regulation 301.6110-2, which are made available for public inspection subject to the withholding of certain types of data as enumerated in Treasury Regulation 301-6110."
+ },
+ {
+  "name": "Railroad Safety Analysis Records",
+  "marking": "RAIL",
+  "group": "Transportation",
+  "kinds": [
+   "Basic"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/railroad-safety-analysis-records",
+  "desc": "Related to the establishment, implementation, or modification of a railroad safety risk reduction program or pilot program, if the record is: (1) Supplied to the Secretary (of Transportation) pursuant to that safety risk reduction program or pilot program; or (2) made available for inspection and copying by an officer, employee, or agent of the Secretary pursuant to that safety risk reduction program or pilot program."
+ },
+ {
+  "name": "Sensitive Security Information",
+  "marking": "SSI",
+  "group": "Transportation",
+  "kinds": [
+   "Specified"
+  ],
+  "url": "https://www.archives.gov/cui/registry/category-detail/sensitive-security-info",
+  "desc": "As defined in 49 C.F.R. Part 15.5, Sensitive Security Information is information obtained or developed in the conduct of security activities, including research and development, the disclosure of which DOT has determined would constitute an unwarranted invasion of privacy, reveal trade secrets or privileged or confidential information, or be detrimental to transportation safety. As defined in 49 C.F.R. Part 1520.5, Sensitive Security Information is information obtained or developed in the conduct of security activities, including research and development, the disclosure of which DHS/TSA has determined would, among other things, be detrimental to the security of transportation."
+ }
+]
