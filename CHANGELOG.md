@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **README.md** - Replaced generated recipient instructions (committed by mistake in v0.7.0) with a project README (issue #2, finding C2)
+- **REQ-2026-001 v1.2** - REQ-1.3 now requires authenticated encryption (AES-GCM, or AES-CBC with HMAC-SHA256 encrypt-then-MAC); added REQ-1.7 (verify tag before writing plaintext). Status Draft until v2 implements it (issue #2, finding C1). PDF not yet regenerated.
+- **build-requirements-pdf.py** - Revision history table generated from `document.history`; FIPS identifiers keep their dash (FIPS 140-2, not FIPS 140 2)
+
 ### v1.0.0 Target (Non-Technical User Release)
 - Any UX improvements from developer beta feedback
 - Production-ready for non-technical CUI handlers

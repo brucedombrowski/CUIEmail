@@ -1,0 +1,367 @@
+\documentclass[11pt,letterpaper]{article}
+
+% ============================================================================
+% PACKAGES
+% ============================================================================
+\usepackage[margin=1in, top=1.5in, headheight=85pt]{geometry}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{longtable}
+
+% ============================================================================
+% DOCUMENT VARIABLES (Generated from JSON)
+% ============================================================================
+\newcommand{\UniqueID}{REQ-2026-001}
+\newcommand{\DocumentDate}{September 14, 2026}
+\newcommand{\AuthorName}{SendCUIEmail Development Team}
+\newcommand{\DocumentTitle}{Cryptographic Compliance Requirements}
+
+% ============================================================================
+% DOCUMENT CONFIGURATION
+% ============================================================================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    pdfborder={0 0 0},
+    pdftitle={REQ-2026-001 Cryptographic Compliance Requirements},
+    pdfauthor={SendCUIEmail Project},
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+% ============================================================================
+% HEADER AND FOOTER
+% ============================================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{SendCUIEmail}}
+\fancyhead[R]{\parbox[b]{3.5in}{\raggedleft\large\textbf{Requirements Document}}}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\small \UniqueID}
+\fancyfoot[C]{\small Page \thepage\ of \pageref{LastPage}}
+\fancyfoot[R]{\small \DocumentDate}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% Define colors
+\definecolor{mandatory}{RGB}{220,53,69}
+\definecolor{recommended}{RGB}{255,193,7}
+
+% ============================================================================
+% BEGIN DOCUMENT
+% ============================================================================
+\begin{document}
+
+\begin{center}
+\Large\textbf{\DocumentTitle}\\[6pt]
+\large\UniqueID\\[12pt]
+\normalsize\DocumentDate
+\end{center}
+
+\vspace{0.25in}
+
+% ============================================================================
+% DOCUMENT INFO
+% ============================================================================
+\section*{Document Information}
+
+\begin{tabular}{@{}ll@{}}
+\textbf{Document ID:} & \UniqueID \\
+\textbf{Version:} & 1.2 \\
+\textbf{Status:} & Draft \\
+\textbf{Author:} & \AuthorName \\
+\textbf{Date:} & \DocumentDate \\
+\textbf{Source Hash:} & \texttt{5426b726e2ee3aa2} \\
+\end{tabular}
+
+\vspace{0.25in}
+
+% ============================================================================
+% PURPOSE
+% ============================================================================
+\section{Purpose}
+
+This document defines the cryptographic requirements for SendCUIEmail to ensure compliance with federal standards for protecting Controlled Unclassified Information (CUI). These requirements establish the minimum security controls that must be implemented and verified.
+
+% ============================================================================
+% SCOPE
+% ============================================================================
+\section{Scope}
+
+These requirements apply to:
+\begin{itemize}[topsep=4pt, itemsep=2pt]
+    \item File encryption and decryption operations
+    \item Password/key derivation functions
+    \item Random number generation for cryptographic material
+    \item All platforms where SendCUIEmail operates (Windows, macOS, Linux)
+\end{itemize}
+
+% ============================================================================
+% APPLICABLE STANDARDS (Generated from JSON)
+% ============================================================================
+\section{Applicable Standards}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Standard} & \textbf{Description} \\
+\midrule
+\href{https://www.ecfr.gov/current/title-32/subtitle-B/chapter-XX/part-2002}{32 CFR Part 2002} & Controlled Unclassified Information Program \\
+\href{https://csrc.nist.gov/pubs/fips/197/final}{FIPS 197} & Advanced Encryption Standard (AES) \\
+\href{https://csrc.nist.gov/pubs/fips/140-2/final}{FIPS 140-2} & Security Requirements for Cryptographic Modules \\
+\href{https://csrc.nist.gov/pubs/sp/800/132/final}{NIST SP 800-132} & Recommendation for Password-Based Key Derivation \\
+\href{https://csrc.nist.gov/pubs/sp/800/171/r3/final}{NIST SP 800-171} & Protecting CUI in Nonfederal Systems (reference) \\
+\href{https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final}{NIST SP 800-53} & Security Controls for Federal Systems (reference) \\
+\href{https://csrc.nist.gov/pubs/sp/800/38/a/final}{NIST SP 800-38A} & Recommendation for Block Cipher Modes of Operation \\
+\href{https://csrc.nist.gov/pubs/sp/800/90/a/r1/final}{NIST SP 800-90A} & Recommendation for Random Number Generation \\
+\href{https://csrc.nist.gov/pubs/sp/800/63/b/upd2/final}{NIST SP 800-63B} & Digital Identity Guidelines - Authentication \\
+\href{https://csrc.nist.gov/pubs/sp/800/38/d/final}{NIST SP 800-38D} & Recommendation for Block Cipher Modes of Operation: Galois/Counter Mode (GCM) \\
+\href{https://csrc.nist.gov/pubs/fips/198-1/final}{FIPS 198-1} & The Keyed-Hash Message Authentication Code (HMAC) \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================================
+% REQUIREMENTS (Generated from JSON)
+% ============================================================================
+\section{Cryptographic Requirements}
+
+Requirements are categorized as:
+\begin{itemize}[topsep=4pt, itemsep=2pt]
+    \item \textcolor{mandatory}{\textbf{[M]}} -- Mandatory: Must be implemented
+    \item \textcolor{recommended}{\textbf{[R]}} -- Recommended: Should be implemented where feasible
+\end{itemize}
+
+\subsection{Encryption Algorithm Requirements}
+
+\begin{longtable}{@{}p{1.2cm}p{12cm}@{}}
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+\endhead
+
+REQ-1.1 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL use AES (Advanced Encryption Standard) as defined in FIPS 197 for symmetric encryption. \\[6pt]
+
+REQ-1.2 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL use a key length of 256 bits (AES-256) for all encryption operations. \\[6pt]
+
+REQ-1.3 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL use authenticated encryption. Where the runtime provides it, the system SHALL use AES-GCM (NIST SP 800-38D). Otherwise the system SHALL use AES-CBC (NIST SP 800-38A) with an HMAC-SHA256 tag (FIPS 198-1) computed in encrypt-then-MAC order over the file header, IV, and ciphertext, using a MAC key derived independently of the encryption key. \\[6pt]
+
+REQ-1.4 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL generate a unique, random Initialization Vector (IV) for each encryption operation. \\[6pt]
+
+REQ-1.5 & \textcolor{mandatory}{\textbf{[M]}} The IV SHALL be at least 128 bits (16 bytes) for AES-CBC mode. \\[6pt]
+
+REQ-1.6 & \textcolor{mandatory}{\textbf{[M]}} The IV SHALL be stored with or transmitted alongside the ciphertext. \\[6pt]
+
+REQ-1.7 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL verify the authentication tag before writing any plaintext. On tag mismatch the system SHALL report failure and SHALL NOT produce an output file. \\[6pt]
+
+\bottomrule
+\end{longtable}
+
+\subsection{Key Derivation Requirements}
+
+\begin{longtable}{@{}p{1.2cm}p{12cm}@{}}
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+\endhead
+
+REQ-2.1 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL use PBKDF2 (Password-Based Key Derivation Function 2) as defined in NIST SP 800-132 for deriving encryption keys from passwords. \\[6pt]
+
+REQ-2.2 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL use HMAC-SHA256 as the pseudorandom function (PRF) for PBKDF2. \\[6pt]
+
+REQ-2.3 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL use a minimum of 100,000 iterations for PBKDF2 per NIST SP 800-132 recommendations. \\[6pt]
+
+REQ-2.4 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL generate a unique, random salt for each encryption operation. \\[6pt]
+
+REQ-2.5 & \textcolor{mandatory}{\textbf{[M]}} The salt SHALL be at least 128 bits (16 bytes) as recommended by NIST SP 800-132. \\[6pt]
+
+REQ-2.6 & \textcolor{mandatory}{\textbf{[M]}} The salt SHALL be stored with or transmitted alongside the ciphertext. \\[6pt]
+
+REQ-2.7 & \textcolor{recommended}{\textbf{[R]}} The iteration count SHOULD be increased over time as computing power increases. \\[6pt]
+
+\bottomrule
+\end{longtable}
+
+\subsection{Random Number Generation Requirements}
+
+\begin{longtable}{@{}p{1.2cm}p{12cm}@{}}
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+\endhead
+
+REQ-3.1 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL use a cryptographically secure random number generator (CSPRNG) for generating salts, IVs, and other cryptographic material. \\[6pt]
+
+REQ-3.2 & \textcolor{mandatory}{\textbf{[M]}} On Windows, the system SHALL use the system RNG provided by .NET (RNGCryptoServiceProvider or RandomNumberGenerator). \\[6pt]
+
+REQ-3.3 & \textcolor{mandatory}{\textbf{[M]}} The CSPRNG SHALL meet the requirements of NIST SP 800-90A or equivalent. \\[6pt]
+
+\bottomrule
+\end{longtable}
+
+\subsection{Password Requirements}
+
+\begin{longtable}{@{}p{1.2cm}p{12cm}@{}}
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+\endhead
+
+REQ-4.1 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL enforce a minimum password length of 8 characters. \\[6pt]
+
+REQ-4.2 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL require password confirmation during encryption to prevent typos. \\[6pt]
+
+REQ-4.3 & \textcolor{recommended}{\textbf{[R]}} The system SHOULD offer automatic passphrase generation using cryptographic RNG. \\[6pt]
+
+REQ-4.4 & \textcolor{mandatory}{\textbf{[M]}} Passwords SHALL NOT be stored or logged by the system. \\[6pt]
+
+REQ-4.5 & \textcolor{mandatory}{\textbf{[M]}} Password input SHALL be masked (not displayed on screen) during entry. \\[6pt]
+
+\bottomrule
+\end{longtable}
+
+\subsection{File Format Requirements}
+
+\begin{longtable}{@{}p{1.2cm}p{12cm}@{}}
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+\endhead
+
+REQ-5.1 & \textcolor{mandatory}{\textbf{[M]}} Encrypted files SHALL contain: salt, IV, and ciphertext in a defined format. \\[6pt]
+
+REQ-5.2 & \textcolor{mandatory}{\textbf{[M]}} The file format SHALL be: [16-byte salt][16-byte IV][ciphertext]. \\[6pt]
+
+REQ-5.3 & \textcolor{mandatory}{\textbf{[M]}} Encrypted files SHALL use the .Locked extension to indicate encrypted status. \\[6pt]
+
+REQ-5.4 & \textcolor{mandatory}{\textbf{[M]}} The original file extension SHALL be preserved (e.g., document.pdf becomes document.pdf.Locked). \\[6pt]
+
+\bottomrule
+\end{longtable}
+
+\subsection{Platform Requirements}
+
+\begin{longtable}{@{}p{1.2cm}p{12cm}@{}}
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Requirement} \\
+\midrule
+\endhead
+
+REQ-6.1 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL use platform-provided cryptographic libraries (no custom implementations). \\[6pt]
+
+REQ-6.2 & \textcolor{mandatory}{\textbf{[M]}} On Windows, the system SHALL use .NET Framework cryptographic classes (System.Security.Cryptography). \\[6pt]
+
+REQ-6.3 & \textcolor{recommended}{\textbf{[R]}} The system SHOULD detect and warn if FIPS mode is not enabled on Windows. \\[6pt]
+
+REQ-6.4 & \textcolor{mandatory}{\textbf{[M]}} The system SHALL NOT require installation of third-party software on recipient systems. \\[6pt]
+
+\bottomrule
+\end{longtable}
+
+% ============================================================================
+% VERIFICATION
+% ============================================================================
+\section{Verification}
+
+Each requirement SHALL be verified through one or more of the following methods:
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Method} & \textbf{Description} \\
+\midrule
+Inspection & Code review to verify implementation matches requirement \\
+Test & Automated or manual testing to verify correct behavior \\
+Analysis & Review of design documentation or cryptographic parameters \\
+\bottomrule
+\end{tabularx}
+
+\vspace{12pt}
+
+Verification results are documented in the corresponding VER document.
+
+% ============================================================================
+% TRACEABILITY (Generated from JSON)
+% ============================================================================
+\section{Requirements Traceability}
+
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Requirement} & \textbf{Standard} & \textbf{Section} \\
+\midrule
+REQ-1.1 & FIPS 197 & \S5 Algorithm Specification \\
+REQ-1.2 & FIPS 197 & \S6.1 Key Length Requirements \\
+REQ-1.3 & NIST SP 800-38D & \S5 GCM; FIPS 198-1 \S4 HMAC \\
+REQ-1.4 & NIST SP 800-38A & Appendix C Generation of IVs \\
+REQ-1.5 & NIST SP 800-38A & \S5.3 Initialization Vector \\
+REQ-1.6 & NIST SP 800-38A & \S5.3 Initialization Vector \\
+REQ-1.7 & FIPS 198-1 & \S4 HMAC; SP 800-38D \S7.2 Decryption \\
+REQ-2.1 & NIST SP 800-132 & \S5.3 PBKDF Specification \\
+REQ-2.2 & NIST SP 800-132 & \S5.3 PRF Selection \\
+REQ-2.3 & NIST SP 800-132 & \S5.1.1.2 Iteration Count \\
+REQ-2.4 & NIST SP 800-132 & \S5.1 Salt \\
+REQ-2.5 & NIST SP 800-132 & \S5.1 Salt \\
+REQ-2.6 & NIST SP 800-132 & \S5.1 Salt \\
+REQ-2.7 & NIST SP 800-132 & \S5.1.1.2 Iteration Count \\
+REQ-3.1 & NIST SP 800-90A & \S8.6.7 Get\_entropy\_input \\
+REQ-3.2 & NIST SP 800-90A & \S8.6.7 Get\_entropy\_input \\
+REQ-3.3 & NIST SP 800-90A & \S8.6.7 Get\_entropy\_input \\
+REQ-4.1 & NIST SP 800-63B & \S5.1.1.1 Memorized Secret Authenticators \\
+REQ-4.2 & NIST SP 800-63B & \S5.1.1.1 Memorized Secret Authenticators \\
+REQ-4.3 & NIST SP 800-63B & \S5.1.1.2 Memorized Secret Verifiers \\
+REQ-4.4 & NIST SP 800-63B & \S5.1.1.2 Memorized Secret Verifiers \\
+REQ-4.5 & NIST SP 800-63B & \S5.1.1.2 Memorized Secret Verifiers \\
+REQ-5.1 & FIPS 140-2 & \S4.1 Cryptographic Module Specification \\
+REQ-5.2 & FIPS 140-2 & \S4.1 Cryptographic Module Specification \\
+REQ-5.3 & 32 CFR Part 2002 & \S2002.20 Marking \\
+REQ-5.4 & 32 CFR Part 2002 & \S2002.20 Marking \\
+REQ-6.1 & FIPS 140-2 & \S4.1 Cryptographic Module Specification \\
+REQ-6.2 & FIPS 140-2 & \S4.1 Cryptographic Module Specification \\
+REQ-6.3 & FIPS 140-2 & \S4.9.1 FIPS Mode \\
+REQ-6.4 & 32 CFR Part 2002 & \S2002.16 Accessing and disseminating \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================================
+% REVISION HISTORY
+% ============================================================================
+\section{Revision History}
+
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Version} & \textbf{Date} & \textbf{Description} \\
+\midrule
+1.0 & January 22, 2026 & Initial release \\
+1.1 & January 22, 2026 & Added trace field for data-driven traceability table \\
+1.2 & September 14, 2026 & REQ-1.3 tightened to require authenticated encryption; added REQ-1.7 (tag verification before output). Audit finding C1, issue \#2 \\
+\bottomrule
+\end{tabularx}
+
+\end{document}

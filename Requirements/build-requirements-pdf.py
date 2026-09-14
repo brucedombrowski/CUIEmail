@@ -51,7 +51,7 @@ def format_standard_id(std_id):
     if std_id.startswith("32-CFR"):
         return "32 CFR Part " + std_id.split("-")[-1]
     elif std_id.startswith("FIPS"):
-        return std_id.replace("-", " ")
+        return std_id.replace("-", " ", 1)
     elif std_id.startswith("NIST-SP"):
         parts = std_id.split("-")
         return f"NIST SP {parts[2]}-{parts[3]}" + (f"-{parts[4]}" if len(parts) > 4 else "")
@@ -311,7 +311,9 @@ Verification results are documented in the corresponding VER document.
 \midrule
 """
 
-    tex += rf"{doc['version']} & {formatted_date} & Initial release \\" + "\n"
+    history = doc.get("history") or [{"version": doc["version"], "date": doc["date"], "description": "Initial release"}]
+    for h in history:
+        tex += rf"{h['version']} & {format_date(h['date'])} & {escape_latex(h['description'])} \\" + "\n"
 
     tex += r"""\bottomrule
 \end{tabularx}

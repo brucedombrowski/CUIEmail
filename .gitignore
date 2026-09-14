@@ -67,3 +67,7 @@ Decisions/*.synctex.gz
 Decisions/*.fdb_latexmk
 Decisions/*.fls
 Decisions/missfont.log
+
+# Python bytecode
+__pycache__/
+*.pyc
