@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "node build.mjs",
-    "test": "node --test test/",
+    "test": "node --test \"test/*.test.mjs\"",
     "fixtures": "node test/make-fixtures.mjs"
   },
   "engines": { "node": ">=20" }
