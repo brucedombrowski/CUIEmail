@@ -6,7 +6,7 @@ import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
-const VERSION = process.env.SCE_VERSION || pkg.version;
+const VERSION = (process.env.SCE_VERSION || pkg.version).replace(/^v/, '');
 
 const jsonInline = (p) => readFileSync('src/' + p, 'utf8').trim();
 
